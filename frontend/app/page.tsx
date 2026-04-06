@@ -40,7 +40,7 @@ export default function Home() {
           </h2>
 
           <p className="pl-7">
-            We listen, help and improve.
+            We provide legal assistance through our intellectual team.
           </p>
         </div>
 
