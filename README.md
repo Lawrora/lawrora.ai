@@ -1,4 +1,4 @@
-# Lawrora AI — Chatbot (LLM + RAG + Guardrails)
+# Lawrora AI Chatbot (LLM + RAG + Guardrails)
 
 ## Objective
 
