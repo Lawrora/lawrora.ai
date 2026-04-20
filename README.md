@@ -1,4 +1,3 @@
-```markdown
 # Lawrora AI — Chatbot (LLM + RAG + Guardrails)
 
 ## Objective
@@ -718,4 +717,4 @@ System deploys automatically
 Logs and monitoring enabled
 
 ```
-```
+
