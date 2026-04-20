@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link"
 
 export default function Home() {
   return (
@@ -8,6 +9,11 @@ export default function Home() {
         <h1 className="text-2xl font-bold text-white">
           Home
         </h1>
+
+          <div className="flex gap-8 text-lg font-medium">
+          <Link href = "/"> Home </Link>
+          <Link href = "/llm"> LLM </Link>
+        </div>
 
       </header>
 
