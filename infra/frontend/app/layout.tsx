@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Lawrora",
-  description: "Legal help from AI",
+  description: "Law AI",
 };
 
 export default function RootLayout({
