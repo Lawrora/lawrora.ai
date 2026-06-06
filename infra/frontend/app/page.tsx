@@ -13,6 +13,10 @@ import {
   Users,
   FileText,
   Clock,
+  Bot,
+  UserCheck,
+  Search,
+  Lightbulb,
 } from "lucide-react"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
@@ -28,13 +32,13 @@ export const metadata: Metadata = {
 }
 
 const featureStrip = [
-  { title: "Lead Capture",           desc: "Catches every inbound lead from call, text, and web, around the clock.",                             color: "bg-blue-500"    },
-  { title: "AI Qualification",       desc: "Engages prospects in real time to assess case fit before any attorney time is spent.",               color: "bg-violet-500"  },
-  { title: "Lawyer Matching",        desc: "Routes each lead to the right attorney by practice area and availability.",                          color: "bg-emerald-500" },
-  { title: "Demand Letter Drafting", desc: "Generates first-draft demand letters from case facts in seconds, ready for attorney review.",        color: "bg-orange-500"  },
-  { title: "Case Research",          desc: "Surfaces relevant precedents, statutes, and secondary sources in seconds.",                          color: "bg-amber-500"   },
-  { title: "Strategy Guidance",      desc: "Suggests next steps and litigation approaches based on case facts.",                                 color: "bg-rose-500"    },
-  { title: "Smart Scheduling",       desc: "Manages attorney calendars, deadlines, and client coordination automatically.",                      color: "bg-cyan-500"    },
+  { title: "Lead Capture",           desc: "Catches every inbound lead from call, text, and web, around the clock.",                      iconBg: "bg-blue-500/12",    iconColor: "text-blue-600",    icon: <Phone       size={15} strokeWidth={1.8} /> },
+  { title: "AI Qualification",       desc: "Engages prospects in real time to assess case fit before any attorney time is spent.",        iconBg: "bg-violet-500/12",  iconColor: "text-violet-600",  icon: <Bot         size={15} strokeWidth={1.8} /> },
+  { title: "Lawyer Matching",        desc: "Routes each lead to the right attorney by practice area and availability.",                  iconBg: "bg-emerald-500/12", iconColor: "text-emerald-600", icon: <UserCheck   size={15} strokeWidth={1.8} /> },
+  { title: "Demand Letter Drafting", desc: "Generates first-draft demand letters from case facts in seconds, ready for attorney review.", iconBg: "bg-orange-500/12",  iconColor: "text-orange-600",  icon: <FileText    size={15} strokeWidth={1.8} /> },
+  { title: "Case Research",          desc: "Surfaces relevant precedents, statutes, and secondary sources in seconds.",                  iconBg: "bg-amber-500/12",   iconColor: "text-amber-600",   icon: <Search      size={15} strokeWidth={1.8} /> },
+  { title: "Strategy Guidance",      desc: "Suggests next steps and litigation approaches based on case facts.",                         iconBg: "bg-rose-500/12",    iconColor: "text-rose-600",    icon: <Lightbulb   size={15} strokeWidth={1.8} /> },
+  { title: "Smart Scheduling",       desc: "Manages attorney calendars, deadlines, and client coordination automatically.",              iconBg: "bg-cyan-500/12",    iconColor: "text-cyan-600",    icon: <CalendarCheck size={15} strokeWidth={1.8} /> },
 ]
 
 const trustStats = [
@@ -85,8 +89,26 @@ export default function Home() {
       <Header />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="pt-28 pb-0 px-8" aria-labelledby="hero-heading">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-135">
+      <section
+        className="pt-28 pb-0 px-8 relative overflow-hidden"
+        aria-labelledby="hero-heading"
+        style={{ background: "linear-gradient(155deg, #FCF9EA 0%, #EEF0FF 45%, #ffffff 75%)" }}
+      >
+        {/* Background blobs */}
+        <div className="absolute -top-32 right-0 w-140 h-140 rounded-full bg-blue-200/35 blur-3xl pointer-events-none" />
+        <div className="absolute top-24 -left-20 w-80 h-80 rounded-full bg-amber-200/40 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/3 w-64 h-64 rounded-full bg-violet-200/25 blur-3xl pointer-events-none" />
+
+        {/* Dot grid overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(circle, rgba(14,14,44,0.045) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+
+        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-135 relative z-10">
 
           {/* Left */}
           <div className="py-12">
@@ -212,11 +234,13 @@ export default function Home() {
       >
         <div className="flex animate-marquee w-max gap-16 px-8" aria-hidden="true">
           {[...featureStrip, ...featureStrip].map((f, i) => (
-            <div key={i} className="flex items-start gap-3 w-55 shrink-0">
-              <span className={`w-2.5 h-2.5 rounded-full mt-1 shrink-0 ${f.color}`} />
+            <div key={i} className="flex items-center gap-3 shrink-0">
+              <div className={`w-9 h-9 rounded-xl ${f.iconBg} flex items-center justify-center shrink-0 ${f.iconColor}`}>
+                {f.icon}
+              </div>
               <div>
-                <p className="text-sm font-semibold text-[#0E0E2C]">{f.title}</p>
-                <p className="text-xs text-[#0E0E2C]/50 mt-0.5 leading-snug">{f.desc}</p>
+                <p className="text-sm font-semibold text-[#0E0E2C] whitespace-nowrap">{f.title}</p>
+                <p className="text-xs text-[#0E0E2C]/50 mt-0.5 leading-snug max-w-48">{f.desc}</p>
               </div>
             </div>
           ))}

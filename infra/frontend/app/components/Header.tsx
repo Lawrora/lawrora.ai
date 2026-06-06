@@ -54,7 +54,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handler)
   }, [])
 
-  // Close mobile menu on route change / ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMobileOpen(false) }
     window.addEventListener("keydown", onKey)
@@ -67,13 +66,13 @@ export default function Header() {
         className={`fixed top-0 z-50 w-full transition-all duration-300 ${
           scrolled
             ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-[#0E0E2C]/8"
-            : "bg-white border-b border-[#0E0E2C]/8"
+            : "bg-white/90 backdrop-blur-sm border-b border-[#0E0E2C]/6"
         }`}
       >
         <div className="w-full flex items-center justify-between pl-7 pr-5 py-3">
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 leading-none shrink-0 group">
+          {/* Logo — always left */}
+          <Link href="/" className="flex items-center gap-2.5 leading-none shrink-0">
             <div className="w-8 h-8 rounded-lg bg-[#0E0E2C] flex items-center justify-center shrink-0">
               <Scale size={15} strokeWidth={2} className="text-white" />
             </div>
@@ -83,76 +82,78 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[#0E0E2C]/65">
+          {/* Desktop: nav + CTA grouped on the right */}
+          <div className="hidden md:flex items-center gap-1">
+            <nav className="flex items-center text-sm font-medium text-[#0E0E2C]/60">
 
-            {/* Products dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setProductsOpen(true)}
-              onMouseLeave={() => setProductsOpen(false)}
-            >
-              <Link
-                href="/products"
-                className="flex items-center gap-1 hover:text-[#0E0E2C] transition-colors py-4 nav-underline"
+              {/* Products dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setProductsOpen(true)}
+                onMouseLeave={() => setProductsOpen(false)}
               >
-                Products
-                <ChevronDown
-                  size={12}
-                  strokeWidth={2.5}
-                  className={`transition-transform duration-200 ${productsOpen ? "rotate-180" : ""}`}
-                />
-              </Link>
+                <Link
+                  href="/products"
+                  className="flex items-center gap-1 hover:text-[#0E0E2C] hover:bg-[#0E0E2C]/4 transition-colors px-4 py-2 rounded-lg"
+                >
+                  Products
+                  <ChevronDown
+                    size={12}
+                    strokeWidth={2.5}
+                    className={`transition-transform duration-200 ${productsOpen ? "rotate-180" : ""}`}
+                  />
+                </Link>
 
-              {productsOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-76 bg-white rounded-2xl shadow-xl border border-[#0E0E2C]/8 p-2 z-50 animate-fade-in">
-                  {products.map((p) => (
-                    <Link
-                      key={p.name}
-                      href={p.href}
-                      className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-[#FCF9EA] transition-colors"
-                    >
-                      <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${p.dot}`} />
-                      <div>
-                        <span className="block text-sm font-semibold text-[#0E0E2C]">{p.name}</span>
-                        <span className="block text-xs text-[#0E0E2C]/50 leading-snug mt-0.5">{p.desc}</span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                {productsOpen && (
+                  <div className="absolute top-full right-0 mt-1 w-76 bg-white rounded-2xl shadow-xl border border-[#0E0E2C]/8 p-2 z-50 animate-fade-in">
+                    {products.map((p) => (
+                      <Link
+                        key={p.name}
+                        href={p.href}
+                        className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-[#FCF9EA] transition-colors"
+                      >
+                        <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${p.dot}`} />
+                        <div>
+                          <span className="block text-sm font-semibold text-[#0E0E2C]">{p.name}</span>
+                          <span className="block text-xs text-[#0E0E2C]/50 leading-snug mt-0.5">{p.desc}</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            {navLinks.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="hover:text-[#0E0E2C] transition-colors nav-underline py-4"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+              {navLinks.map(({ label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className="hover:text-[#0E0E2C] hover:bg-[#0E0E2C]/4 transition-colors px-4 py-2 rounded-lg"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-3">
+            {/* Divider */}
+            <div className="w-px h-5 bg-[#0E0E2C]/10 mx-3" />
+
             <Link
               href="#demo"
-              className="hidden md:inline-flex items-center rounded-full bg-[#0E0E2C] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0E0E2C]/85 transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center rounded-full bg-[#0E0E2C] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0E0E2C]/85 transition-all duration-200 hover:-translate-y-0.5"
             >
               Book a Demo
             </Link>
-
-            {/* Mobile hamburger */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-[#FCF9EA] transition-colors text-[#0E0E2C]"
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
           </div>
+
+          {/* Mobile: hamburger only */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-[#FCF9EA] transition-colors text-[#0E0E2C]"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
 
         {/* Mobile menu */}
