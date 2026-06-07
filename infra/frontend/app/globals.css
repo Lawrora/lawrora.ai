@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0E0E2C;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
 }
 
 @theme inline {
@@ -128,7 +128,7 @@ body {
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(14, 14, 44, 0.08);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.06);
 }
 
 /* ── Underline slide on nav links ────────── */

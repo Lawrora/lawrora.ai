@@ -106,7 +106,7 @@ export default function DemoPageForm() {
       {/* Section 1: Your information */}
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#0E0E2C]/35 mb-5">
-          01 — Your information
+          Your Information
         </p>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -225,7 +225,7 @@ export default function DemoPageForm() {
       {/* Section 2: Calendar */}
       <div>
         <p className="text-[10px] font-bold uppercase tracking-widest text-[#0E0E2C]/35 mb-5">
-          02 — Pick a date &amp; time
+          Pick a Date &amp; Time
         </p>
         <DemoCalendar
           onSelect={handleCalendarSelect}

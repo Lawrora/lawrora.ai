@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react"
 const faqs = [
   {
     q: "How does Lawrora handle leads that come in by phone?",
-    a: "Lawrora integrates with your existing phone lines. When a call comes in, AI joins the conversation, qualifies the prospect in real time, and prepares a brief for the attorney. The attorney picks up a pre-qualified call — never a cold one.",
+    a: "Lawrora integrates with your existing phone lines. When a call comes in, AI joins the conversation, qualifies the prospect in real time, and prepares a brief for the attorney. The attorney picks up a pre-qualified call, never a cold one.",
   },
   {
     q: "How does the lawyer matching work?",
@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: "Which practice areas are supported in Phase 1?",
-    a: "Phase 1 is purpose-built for Personal Injury and Real Estate — two of the highest-volume, most time-sensitive practice areas. Additional practice areas including Family Law, Immigration, and Litigation are on the roadmap.",
+    a: "Phase 1 is purpose-built for Personal Injury and Real Estate, two of the highest-volume, most time-sensitive practice areas. Additional practice areas including Family Law, Immigration, and Litigation are on the roadmap.",
   },
   {
     q: "Is client data secure and HIPAA compliant?",
@@ -42,26 +42,26 @@ export default function FaqAccordion() {
         return (
           <div
             key={i}
-            className="border-b border-[#0E0E2C]/10 last:border-b-0 md:last:border-b md:[&:nth-last-child(2)]:border-b-0"
+            className="border-b border-white/10 last:border-b-0 md:last:border-b md:nth-last-2:border-b-0"
           >
             <button
               onClick={() => toggle(i)}
               className="w-full flex items-center justify-between py-5 text-left gap-4 group cursor-pointer"
               aria-expanded={isOpen}
             >
-              <span className="text-sm font-semibold text-[#0E0E2C] group-hover:text-[#0E0E2C]/80 transition-colors">
+              <span className="text-sm font-semibold text-white group-hover:text-white/80 transition-colors">
                 {faq.q}
               </span>
               <ChevronDown
                 size={16}
                 strokeWidth={2}
-                className={`shrink-0 text-[#0E0E2C]/35 transition-transform duration-250 ${
+                className={`shrink-0 text-white/35 transition-transform duration-250 ${
                   isOpen ? "rotate-180" : ""
                 }`}
               />
             </button>
             {isOpen && (
-              <p className="text-sm text-[#0E0E2C]/60 leading-relaxed pb-5 animate-accordion-down">
+              <p className="text-sm text-white/55 leading-relaxed pb-5 animate-accordion-down">
                 {faq.a}
               </p>
             )}
