@@ -2,38 +2,38 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ChevronDown, Menu, X, Scale } from "lucide-react"
+import { ChevronDown, Menu, X, Scale, Phone, UserCheck, FileText, BookOpen, CalendarCheck } from "lucide-react"
 
 const products = [
   {
     name: "Lead AI",
     desc: "Captures and qualifies leads from call, text, or web, 24/7.",
     href: "/products/lead-ai",
-    dot: "bg-blue-500",
+    icon: <Phone size={14} strokeWidth={2} className="text-[#0E0E2C]/60" />,
   },
   {
     name: "Match AI",
     desc: "Recommends the right attorney to every prospective client instantly.",
     href: "/products/match-ai",
-    dot: "bg-violet-500",
+    icon: <UserCheck size={14} strokeWidth={2} className="text-[#0E0E2C]/60" />,
   },
   {
     name: "Draft AI",
     desc: "Generates demand letters, agreements, and filings in seconds.",
     href: "/products/draft-ai",
-    dot: "bg-orange-500",
+    icon: <FileText size={14} strokeWidth={2} className="text-[#0E0E2C]/60" />,
   },
   {
     name: "Counsel AI",
     desc: "Gives attorneys research, precedents, and AI-suggested next steps.",
     href: "/products/counsel-ai",
-    dot: "bg-amber-500",
+    icon: <BookOpen size={14} strokeWidth={2} className="text-[#0E0E2C]/60" />,
   },
   {
     name: "Schedule AI",
     desc: "Manages attorney calendars, deadlines, and client coordination.",
     href: "/products/schedule-ai",
-    dot: "bg-emerald-500",
+    icon: <CalendarCheck size={14} strokeWidth={2} className="text-[#0E0E2C]/60" />,
   },
 ]
 
@@ -63,28 +63,28 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-[#0E0E2C]/8"
-            : "bg-white/90 backdrop-blur-sm border-b border-[#0E0E2C]/6"
+            ? "bg-white/96 backdrop-blur-md shadow-sm border-b border-[#0E0E2C]/8"
+            : "bg-transparent border-b border-transparent"
         }`}
       >
         <div className="w-full flex items-center justify-between pl-7 pr-5 py-3">
 
           {/* Logo — always left */}
           <Link href="/" className="flex items-center gap-2.5 leading-none shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-[#0E0E2C] flex items-center justify-center shrink-0">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-500 ${scrolled ? "bg-[#0E0E2C]" : "bg-white/15 border border-white/25"}`}>
               <Scale size={15} strokeWidth={2} className="text-white" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-xl font-bold tracking-tight text-[#0E0E2C]">LAWRORA</span>
-              <span className="text-[9px] font-semibold tracking-widest text-[#0E0E2C]/40 uppercase">Legal Ease</span>
+              <span className={`text-xl font-bold tracking-tight transition-colors duration-500 ${scrolled ? "text-[#0E0E2C]" : "text-white"}`}>LAWRORA</span>
+              <span className={`text-[9px] font-semibold tracking-widest uppercase transition-colors duration-500 ${scrolled ? "text-[#0E0E2C]/40" : "text-white/50"}`}>Legal Ease</span>
             </div>
           </Link>
 
           {/* Desktop: nav + CTA grouped on the right */}
           <div className="hidden md:flex items-center gap-1">
-            <nav className="flex items-center text-sm font-medium text-[#0E0E2C]/60">
+            <nav className={`flex items-center text-sm font-medium transition-colors duration-500 ${scrolled ? "text-[#0E0E2C]/60" : "text-white/75"}`}>
 
               {/* Products dropdown */}
               <div
@@ -94,7 +94,7 @@ export default function Header() {
               >
                 <Link
                   href="/products"
-                  className="flex items-center gap-1 hover:text-[#0E0E2C] hover:bg-[#0E0E2C]/4 transition-colors px-4 py-2 rounded-lg"
+                  className={`flex items-center gap-1 transition-colors px-4 py-2 rounded-lg ${scrolled ? "hover:text-[#0E0E2C] hover:bg-[#0E0E2C]/4" : "hover:text-white hover:bg-white/10"}`}
                 >
                   Products
                   <ChevronDown
@@ -110,9 +110,11 @@ export default function Header() {
                       <Link
                         key={p.name}
                         href={p.href}
-                        className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-[#FCF9EA] transition-colors"
+                        className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-[#F8F7F2] transition-colors"
                       >
-                        <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${p.dot}`} />
+                        <div className="w-7 h-7 rounded-lg bg-[#0E0E2C]/6 flex items-center justify-center shrink-0 mt-0.5">
+                          {p.icon}
+                        </div>
                         <div>
                           <span className="block text-sm font-semibold text-[#0E0E2C]">{p.name}</span>
                           <span className="block text-xs text-[#0E0E2C]/50 leading-snug mt-0.5">{p.desc}</span>
@@ -127,7 +129,7 @@ export default function Header() {
                 <Link
                   key={label}
                   href={href}
-                  className="hover:text-[#0E0E2C] hover:bg-[#0E0E2C]/4 transition-colors px-4 py-2 rounded-lg"
+                  className={`transition-colors px-4 py-2 rounded-lg ${scrolled ? "hover:text-[#0E0E2C] hover:bg-[#0E0E2C]/4" : "hover:text-white hover:bg-white/10"}`}
                 >
                   {label}
                 </Link>
@@ -135,11 +137,11 @@ export default function Header() {
             </nav>
 
             {/* Divider */}
-            <div className="w-px h-5 bg-[#0E0E2C]/10 mx-3" />
+            <div className={`w-px h-5 mx-3 transition-colors duration-500 ${scrolled ? "bg-[#0E0E2C]/10" : "bg-white/20"}`} />
 
             <Link
-              href="#demo"
-              className="inline-flex items-center rounded-full bg-[#0E0E2C] px-5 py-2 text-sm font-semibold text-white hover:bg-[#0E0E2C]/85 transition-all duration-200 hover:-translate-y-0.5"
+              href="/demo"
+              className={`inline-flex items-center px-5 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 ${scrolled ? "bg-[#0E0E2C] text-white hover:bg-[#0E0E2C]/85" : "bg-white text-[#0E0E2C] hover:bg-white/90"}`}
             >
               Book a Demo
             </Link>
@@ -148,7 +150,7 @@ export default function Header() {
           {/* Mobile: hamburger only */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-[#FCF9EA] transition-colors text-[#0E0E2C]"
+            className={`md:hidden p-2 rounded-lg transition-colors ${scrolled ? "text-[#0E0E2C] hover:bg-[#FCF9EA]" : "text-white hover:bg-white/10"}`}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
@@ -168,9 +170,11 @@ export default function Header() {
                   key={p.name}
                   href={p.href}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-[#FCF9EA] transition-colors"
+                  className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F8F7F2] transition-colors"
                 >
-                  <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${p.dot}`} />
+                  <div className="w-7 h-7 rounded-lg bg-[#0E0E2C]/6 flex items-center justify-center shrink-0 mt-0.5">
+                    {p.icon}
+                  </div>
                   <div>
                     <span className="block text-sm font-semibold text-[#0E0E2C]">{p.name}</span>
                     <span className="block text-xs text-[#0E0E2C]/50 mt-0.5 leading-snug">{p.desc}</span>
@@ -193,7 +197,7 @@ export default function Header() {
             </div>
 
             <Link
-              href="#demo"
+              href="/demo"
               onClick={() => setMobileOpen(false)}
               className="block w-full text-center rounded-xl bg-[#0E0E2C] px-5 py-3 text-sm font-semibold text-white"
             >

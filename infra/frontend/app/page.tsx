@@ -2,14 +2,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import {
   Phone,
-  MessageSquare,
-  Globe,
   ShieldCheck,
   Zap,
   CalendarCheck,
   Lock,
-  ArrowRight,
   Scale,
+  ArrowRight,
   Users,
   FileText,
   Clock,
@@ -21,7 +19,6 @@ import {
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import WorkflowSection from "./components/WorkflowSection"
-import DemoForm from "./components/DemoForm"
 import FaqAccordion from "./components/FaqAccordion"
 
 export const metadata: Metadata = {
@@ -89,141 +86,39 @@ export default function Home() {
       <Header />
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section
-        className="pt-28 pb-0 px-8 relative overflow-hidden"
-        aria-labelledby="hero-heading"
-        style={{ background: "linear-gradient(155deg, #FCF9EA 0%, #EEF0FF 45%, #ffffff 75%)" }}
-      >
-        {/* Background blobs */}
-        <div className="absolute -top-32 right-0 w-140 h-140 rounded-full bg-blue-200/35 blur-3xl pointer-events-none" />
-        <div className="absolute top-24 -left-20 w-80 h-80 rounded-full bg-amber-200/40 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/3 w-64 h-64 rounded-full bg-violet-200/25 blur-3xl pointer-events-none" />
+      <section className="relative min-h-screen flex items-center overflow-hidden" aria-labelledby="hero-heading">
+        {/* Video background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          aria-hidden="true"
+        >
+          <source src="/bg.mp4" type="video/mp4" />
+        </video>
 
-        {/* Dot grid overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(circle, rgba(14,14,44,0.045) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-[#0E0E2C]/60" />
 
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-135 relative z-10">
-
-          {/* Left */}
-          <div className="py-12">
-            <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase bg-[#FCF9EA] text-[#0E0E2C]/60 px-3 py-1.5 rounded-full mb-6">
-              <Scale size={11} strokeWidth={2.5} />
-              Your AI Paralegal
-            </span>
-
+        {/* Content */}
+        <div className="relative z-10 w-full px-8 md:px-16 lg:px-24">
+          <div className="max-w-3xl">
             <h1
               id="hero-heading"
-              className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight mb-5"
+              className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight text-white mb-10"
             >
-              Every Lead Routed.<br />Every Case Prepared.
+              Every Lead Captured.<br />Every Case Ready.
             </h1>
 
-            <p className="text-base text-[#0E0E2C]/60 leading-relaxed mb-8 max-w-lg">
-              Lawrora is your AI paralegal. It captures leads, qualifies them, drafts demand letters and documents, and routes each client to the right attorney — then keeps working inside the case.
-            </p>
-
-            <div className="flex flex-wrap gap-3 mb-10">
-              <Link
-                href="#demo"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0E0E2C] px-7 py-3 text-sm font-semibold text-white hover:bg-[#0E0E2C]/85 transition-all duration-200 hover:-translate-y-0.5 animate-pulse-ring"
-              >
-                Book a Demo
-                <ArrowRight size={14} strokeWidth={2.5} />
-              </Link>
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 rounded-full border border-[#0E0E2C]/15 bg-white px-7 py-3 text-sm font-semibold text-[#0E0E2C] hover:border-[#0E0E2C]/30 transition-all duration-200 hover:-translate-y-0.5"
-              >
-                See products
-              </Link>
-            </div>
-
-            <div className="flex flex-wrap gap-5">
-              {[
-                { icon: <ShieldCheck size={13} strokeWidth={2.5} className="text-emerald-500" />, text: "HIPAA & SOC 2 compliant" },
-                { icon: <Zap size={13} strokeWidth={2.5} className="text-amber-500" />,          text: "Live in 48 hours"         },
-                { icon: <Users size={13} strokeWidth={2.5} className="text-blue-500" />,          text: "Right attorney, every time" },
-              ].map(({ icon, text }) => (
-                <div key={text} className="flex items-center gap-2 text-xs font-medium text-[#0E0E2C]/60">
-                  {icon}
-                  {text}
-                </div>
-              ))}
-            </div>
+            <Link
+              href="/demo"
+              className="inline-block bg-white text-[#0E0E2C] px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200"
+            >
+              Book a Demo
+            </Link>
           </div>
-
-          {/* Right: lead flow diagram */}
-          <div className="hidden md:flex flex-col items-center justify-center bg-[#0E0E2C] rounded-2xl h-110 p-8 gap-5 relative overflow-hidden">
-            {/* Subtle background shimmer */}
-            <div className="absolute inset-0 animate-shimmer pointer-events-none" />
-
-            {/* Channels */}
-            <div className="flex gap-3 relative z-10">
-              {[
-                { label: "Call",  icon: <Phone  size={11} strokeWidth={2} /> },
-                { label: "Text",  icon: <MessageSquare size={11} strokeWidth={2} /> },
-                { label: "Web",   icon: <Globe  size={11} strokeWidth={2} /> },
-              ].map(({ label, icon }) => (
-                <div key={label} className="flex items-center gap-2 rounded-xl bg-white/8 border border-white/10 px-4 py-2.5">
-                  <span className="w-5 h-5 rounded-md bg-white/10 flex items-center justify-center shrink-0 text-white/60">
-                    {icon}
-                  </span>
-                  <span className="text-xs font-semibold text-white/70">{label}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Arrow */}
-            <div className="flex flex-col items-center gap-0.5 relative z-10">
-              <div className="w-px h-6 bg-white/15" />
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-                <path d="M1 1l4 4 4-4" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-
-            {/* AI box */}
-            <div className="flex items-center gap-3 rounded-2xl bg-[#FCF9EA] px-6 py-4 w-60 relative z-10">
-              <div className="w-9 h-9 rounded-xl bg-[#0E0E2C]/8 flex items-center justify-center shrink-0">
-                <Scale size={16} strokeWidth={2} className="text-[#0E0E2C]" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-[#0E0E2C]">AI Qualifies &amp; Matches</p>
-                <p className="text-[10px] text-[#0E0E2C]/50 mt-0.5">Scores, routes, and briefs</p>
-              </div>
-            </div>
-
-            {/* Arrow */}
-            <div className="flex flex-col items-center gap-0.5 relative z-10">
-              <div className="w-px h-6 bg-white/15" />
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-                <path d="M1 1l4 4 4-4" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-
-            {/* Outcome */}
-            <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 w-60 relative z-10">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/15 flex items-center justify-center shrink-0">
-                <Users size={16} strokeWidth={2} className="text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-white">Right Attorney, Instantly</p>
-                <p className="text-[10px] text-white/40 mt-0.5">Pre-qualified case brief ready</p>
-              </div>
-            </div>
-
-            {/* Compliance badge */}
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-semibold text-white/40 relative z-10">
-              <ShieldCheck size={11} strokeWidth={2} className="text-emerald-400" />
-              HIPAA &amp; SOC 2 Type II compliant
-            </div>
-          </div>
-
         </div>
       </section>
 
@@ -432,60 +327,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Demo request ─────────────────────────────────────── */}
-      <section id="demo" className="py-24 px-8 bg-[#0E0E2C] text-white" aria-labelledby="demo-heading">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-
-          {/* Left */}
-          <div className="md:sticky md:top-28">
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
-              Book a demo
-            </p>
-            <h2
-              id="demo-heading"
-              className="text-3xl md:text-4xl font-bold leading-tight mb-6"
-            >
-              See exactly what Lawrora can do for your firm in 30 minutes.
-            </h2>
-            <p className="text-white/60 leading-relaxed mb-10">
-              No slides. No sales pitch. We&apos;ll run Lawrora live on a real workflow and show you what changes for your team from day one.
-            </p>
-
-            <ul className="space-y-5 mb-10">
-              {[
-                { icon: <Zap         size={16} strokeWidth={2} className="text-amber-400 shrink-0 mt-0.5" />,          text: "Live walkthrough tailored to your practice area" },
-                { icon: <Lock        size={16} strokeWidth={2} className="text-violet-400 shrink-0 mt-0.5" />,          text: "HIPAA & SOC 2 compliant. Your data stays yours." },
-                { icon: <CalendarCheck size={16} strokeWidth={2} className="text-emerald-400 shrink-0 mt-0.5" />,       text: "Set up in under 48 hours. No IT team required."  },
-                { icon: <MessageSquare size={16} strokeWidth={2} className="text-blue-400 shrink-0 mt-0.5" />,          text: "Ask anything. Our team answers every question on the call." },
-              ].map(({ icon, text }) => (
-                <li key={text} className="flex items-start gap-3 text-sm text-white/75">
-                  {icon}
-                  {text}
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex flex-wrap gap-3">
-              {[
-                { icon: <ShieldCheck size={12} strokeWidth={2} className="text-emerald-400" />, label: "HIPAA Compliant" },
-                { icon: <ShieldCheck size={12} strokeWidth={2} className="text-blue-400" />,    label: "SOC 2 Type II"   },
-                { icon: <Lock        size={12} strokeWidth={2} className="text-violet-400" />,   label: "Encrypted"       },
-              ].map(({ icon, label }) => (
-                <div key={label} className="flex items-center gap-1.5 rounded-full border border-white/12 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/50">
-                  {icon}
-                  {label}
-                </div>
-              ))}
-            </div>
-
-            <p className="text-xs text-white/25 italic mt-6">
-              Firms that book a demo typically go live within one week.
-            </p>
-          </div>
-
-          {/* Right: form */}
-          <DemoForm />
-
+      {/* ── Final CTA ────────────────────────────────────────── */}
+      <section className="py-24 px-8 bg-[#0E0E2C] text-white">
+        <div className="mx-auto max-w-4xl text-center">
+          <span className="inline-block text-[10px] font-bold tracking-widest uppercase text-white/35 mb-6">
+            Ready to see it work?
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6 tracking-tight">
+            30 minutes.<br />Your real intake. Live.
+          </h2>
+          <p className="text-white/55 leading-relaxed mb-10 max-w-xl mx-auto">
+            No pitch deck. No canned demo. We run Lawrora on an actual case from your practice area and show you exactly what changes from day one.
+          </p>
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-2.5 rounded-full bg-white text-[#0E0E2C] px-8 py-4 text-sm font-bold hover:bg-white/90 transition-all duration-200 hover:-translate-y-0.5"
+          >
+            Book a Free Demo
+            <ArrowRight size={15} strokeWidth={2.5} />
+          </Link>
+          <p className="text-[11px] text-white/25 mt-5">No commitment. No credit card. Set up in 48 hours.</p>
         </div>
       </section>
 
