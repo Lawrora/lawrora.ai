@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
-import SavingsCalculator from "../components/SavingsCalculator"
+import WorkflowSection from "../components/WorkflowSection"
 
 const solutions = [
   {
@@ -32,39 +32,33 @@ const solutions = [
 
 export default function Solutions() {
   return (
-    <main className="min-h-screen bg-white text-[#0E0E2C]">
+    <main className="min-h-screen bg-[#0a0a0a] text-white">
       <Header />
 
       <section className="pt-36 pb-16 px-8">
         <div className="mx-auto max-w-7xl">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#0E0E2C]/40 mb-3">Solutions</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-3">Solutions</p>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mb-5">
             Built for how legal work actually happens
           </h1>
-          <p className="text-lg text-[#0E0E2C]/60 max-w-xl leading-relaxed">
+          <p className="text-lg text-white/55 max-w-xl leading-relaxed">
             Whether you run a firm, an in-house team, or a legal ops function, Lawrora adapts to your workflow.
           </p>
-        </div>
-      </section>
-
-      <section className="pb-16 px-8">
-        <div className="mx-auto max-w-7xl">
-          <SavingsCalculator />
         </div>
       </section>
 
       <section className="pb-24 px-8">
         <div className="mx-auto max-w-7xl space-y-6">
           {solutions.map((s) => (
-            <div key={s.audience} className="rounded-2xl border border-[#0E0E2C]/8 p-8 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 hover:border-[#0E0E2C]/20 transition-colors">
+            <div key={s.audience} className="rounded-2xl border border-white/8 bg-white/4 p-8 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 hover:border-white/15 transition-colors">
               <div>
-                <span className="text-xs font-semibold uppercase tracking-widest text-[#0E0E2C]/40 block mb-3">{s.audience}</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-white/40 block mb-3">{s.audience}</span>
                 <h2 className="text-2xl font-bold mb-4">{s.headline}</h2>
-                <p className="text-sm text-[#0E0E2C]/60 leading-relaxed">{s.body}</p>
+                <p className="text-sm text-white/55 leading-relaxed">{s.body}</p>
               </div>
               <ul className="space-y-3 self-center">
                 {s.points.map((pt) => (
-                  <li key={pt} className="flex items-center gap-3 text-sm text-[#0E0E2C]/70">
+                  <li key={pt} className="flex items-center gap-3 text-sm text-white/65">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" /> {pt}
                   </li>
                 ))}
@@ -74,9 +68,11 @@ export default function Solutions() {
         </div>
       </section>
 
-      <section className="py-16 px-8 bg-[#FCF9EA] text-center">
+      <WorkflowSection />
+
+      <section className="py-16 px-8 bg-white/4 border-t border-white/6 text-center">
         <h2 className="text-2xl font-bold mb-4">See how Lawrora fits your team</h2>
-        <Link href="/#demo" className="inline-block rounded-full bg-[#0E0E2C] px-8 py-3 text-sm font-semibold text-white hover:bg-[#0E0E2C]/85 transition-colors">
+        <Link href="/demo" className="inline-block bg-white text-black px-8 py-3 text-sm font-semibold hover:bg-white/90 transition-colors">
           Book a Demo
         </Link>
       </section>

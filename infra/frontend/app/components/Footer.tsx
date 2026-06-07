@@ -55,7 +55,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0E0E2C] text-white px-8 py-16">
+    <footer className="bg-black text-white px-8 py-16 border-t border-white/6">
       <div className="mx-auto max-w-7xl">
 
         {/* Trust badges */}

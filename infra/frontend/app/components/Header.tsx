@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { ChevronDown, Menu, X, Scale, Phone, UserCheck, FileText, BookOpen, CalendarCheck } from "lucide-react"
 
 const products = [
@@ -47,6 +48,8 @@ export default function Header() {
   const [productsOpen, setProductsOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+  const isHome = pathname === "/"
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 12)
@@ -64,7 +67,7 @@ export default function Header() {
     <>
       <header
         className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-          scrolled
+          scrolled || !isHome
             ? "bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/8"
             : "bg-transparent border-b border-transparent"
         }`}

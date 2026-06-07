@@ -26,10 +26,10 @@ const teamSizes = [
 ]
 
 const inputCls =
-  "w-full rounded-xl border border-[#0E0E2C]/12 bg-white px-4 py-3 text-sm text-[#0E0E2C] placeholder:text-[#0E0E2C]/30 focus:outline-none focus:ring-2 focus:ring-[#0E0E2C]/18 transition-shadow"
+  "w-full rounded-xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:ring-1 focus:ring-white/20 transition-shadow"
 
 const selectCls =
-  "w-full rounded-xl border border-[#0E0E2C]/12 bg-white px-4 py-3 text-sm text-[#0E0E2C] focus:outline-none focus:ring-2 focus:ring-[#0E0E2C]/18 transition-shadow appearance-none cursor-pointer"
+  "w-full rounded-xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/20 transition-shadow appearance-none cursor-pointer"
 
 export default function DemoPageForm() {
   const [form, setForm] = useState({
@@ -78,22 +78,22 @@ export default function DemoPageForm() {
   if (status === "success") {
     return (
       <div className="flex flex-col items-center justify-center min-h-[500px] text-center gap-6 py-16">
-        <div className="w-16 h-16 rounded-full bg-[#0E0E2C] flex items-center justify-center">
+        <div className="w-16 h-16 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
           <CheckCircle size={28} strokeWidth={1.8} className="text-white" />
         </div>
         <div>
-          <h3 className="text-2xl font-bold text-[#0E0E2C] mb-2">You&apos;re booked.</h3>
-          <p className="text-[#0E0E2C]/55 text-sm max-w-sm mx-auto leading-relaxed">
+          <h3 className="text-2xl font-bold text-white mb-2">You&apos;re booked.</h3>
+          <p className="text-white/50 text-sm max-w-sm mx-auto leading-relaxed">
             We&apos;ll send a calendar invite to{" "}
-            <span className="font-semibold text-[#0E0E2C]">{form.email}</span> within the hour.
+            <span className="font-semibold text-white">{form.email}</span> within the hour.
             See you on{" "}
-            <span className="font-semibold text-[#0E0E2C]">
+            <span className="font-semibold text-white">
               {selectedDate?.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </span>{" "}at{" "}
-            <span className="font-semibold text-[#0E0E2C]">{selectedTime}</span>.
+            <span className="font-semibold text-white">{selectedTime}</span>.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2 justify-center text-xs text-[#0E0E2C]/40">
+        <div className="flex flex-wrap gap-2 justify-center text-xs text-white/35">
           <span>Check your inbox for the calendar invite.</span>
         </div>
       </div>
@@ -105,14 +105,14 @@ export default function DemoPageForm() {
 
       {/* Section 1: Your information */}
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-[#0E0E2C]/35 mb-5">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-5">
           Your Information
         </p>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-first">
-                First name <span className="text-[#0E0E2C]/30">*</span>
+              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-first">
+                First name <span className="text-white/25">*</span>
               </label>
               <input
                 id="demo-first" type="text" required
@@ -123,8 +123,8 @@ export default function DemoPageForm() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-last">
-                Last name <span className="text-[#0E0E2C]/30">*</span>
+              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-last">
+                Last name <span className="text-white/25">*</span>
               </label>
               <input
                 id="demo-last" type="text" required
@@ -137,8 +137,8 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-email">
-              Work email <span className="text-[#0E0E2C]/30">*</span>
+            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-email">
+              Work email <span className="text-white/25">*</span>
             </label>
             <input
               id="demo-email" type="email" required
@@ -150,7 +150,7 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-phone">
+            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-phone">
               Phone <span className="text-[#0E0E2C]/25">(optional)</span>
             </label>
             <input
@@ -163,8 +163,8 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-firm">
-              Firm name <span className="text-[#0E0E2C]/30">*</span>
+            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-firm">
+              Firm name <span className="text-white/25">*</span>
             </label>
             <input
               id="demo-firm" type="text" required
@@ -177,8 +177,8 @@ export default function DemoPageForm() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="relative">
-              <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-area">
-                Practice area <span className="text-[#0E0E2C]/30">*</span>
+              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-area">
+                Practice area <span className="text-white/25">*</span>
               </label>
               <select
                 id="demo-area" required
@@ -191,8 +191,8 @@ export default function DemoPageForm() {
               </select>
             </div>
             <div className="relative">
-              <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-size">
-                Team size <span className="text-[#0E0E2C]/30">*</span>
+              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-size">
+                Team size <span className="text-white/25">*</span>
               </label>
               <select
                 id="demo-size" required
@@ -207,7 +207,7 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#0E0E2C]/50 mb-1.5" htmlFor="demo-msg">
+            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-msg">
               What&apos;s your biggest intake or admin pain point?{" "}
               <span className="text-[#0E0E2C]/25">(optional)</span>
             </label>
@@ -224,7 +224,7 @@ export default function DemoPageForm() {
 
       {/* Section 2: Calendar */}
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-[#0E0E2C]/35 mb-5">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-white/35 mb-5">
           Pick a Date &amp; Time
         </p>
         <DemoCalendar
@@ -236,13 +236,13 @@ export default function DemoPageForm() {
 
       {/* Confirmation row */}
       {selectedDate && selectedTime && (
-        <div className="flex items-center gap-3 rounded-xl border border-[#0E0E2C]/12 bg-[#F8F7F2] px-5 py-4 animate-fade-in">
-          <CalendarCheck size={16} strokeWidth={2} className="text-[#0E0E2C]/50 shrink-0" />
-          <p className="text-sm font-semibold text-[#0E0E2C]">
+        <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/6 px-5 py-4 animate-fade-in">
+          <CalendarCheck size={16} strokeWidth={2} className="text-white/50 shrink-0" />
+          <p className="text-sm font-semibold text-white">
             {selectedDate.toLocaleDateString("en-US", {
               weekday: "long", month: "long", day: "numeric", year: "numeric",
             })}{" "}
-            at <span className="text-[#0E0E2C]">{selectedTime}</span>
+            at <span className="text-white">{selectedTime}</span>
           </p>
         </div>
       )}
@@ -261,8 +261,8 @@ export default function DemoPageForm() {
         className={[
           "w-full flex items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-bold transition-all duration-200",
           isReady && status !== "loading"
-            ? "bg-[#0E0E2C] text-white hover:bg-[#0E0E2C]/85 hover:-translate-y-0.5 cursor-pointer"
-            : "bg-[#0E0E2C]/25 text-white/60 cursor-not-allowed",
+            ? "bg-white text-black hover:bg-white/90 hover:-translate-y-0.5 cursor-pointer"
+            : "bg-white/10 text-white/35 cursor-not-allowed",
         ].join(" ")}
       >
         {status === "loading" ? (
@@ -275,7 +275,7 @@ export default function DemoPageForm() {
         )}
       </button>
 
-      <p className="text-center text-xs text-[#0E0E2C]/30">
+      <p className="text-center text-xs text-white/25">
         No commitment. No credit card. Just 30 focused minutes.
       </p>
     </form>
