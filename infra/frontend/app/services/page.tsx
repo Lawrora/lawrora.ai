@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import FadeIn from "../components/FadeIn"
 
 const services = [
   {
@@ -61,31 +62,35 @@ export default function Services() {
           </p>
 
           {services.map(({ name, href, desc }, i) => (
-            <div key={name} className="border-t border-white/10 py-12 grid grid-cols-2 gap-12 items-start">
-              <span className="text-4xl md:text-[2.8rem] font-bold text-white/30 tabular-nums leading-none">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <Link href={href} className="block text-2xl md:text-3xl font-bold text-white mb-3 hover:text-white/70 transition-colors">
-                  {name}
-                </Link>
-                <p className="text-base text-white/55 leading-relaxed">{desc}</p>
+            <FadeIn key={name} delay={0}>
+              <div className="border-t border-white/10 py-12 grid grid-cols-2 gap-12 items-start">
+                <span className="text-4xl md:text-[2.8rem] font-bold text-white/30 tabular-nums leading-none">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <Link href={href} className="block text-2xl md:text-3xl font-bold text-white mb-3 hover:text-white/70 transition-colors">
+                    {name}
+                  </Link>
+                  <p className="text-base text-white/55 leading-relaxed">{desc}</p>
+                </div>
               </div>
-            </div>
+            </FadeIn>
           ))}
 
           {/* CTA row */}
-          <div className="border-t border-white/10 py-12 grid grid-cols-2 gap-12 items-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Reach out today</h2>
-            <div>
-              <Link
-                href="/demo"
-                className="inline-flex items-center bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200"
-              >
-                Book a Demo
-              </Link>
+          <FadeIn>
+            <div className="border-t border-white/10 py-12 grid grid-cols-2 gap-12 items-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-white">Reach out today</h2>
+              <div>
+                <Link
+                  href="/demo"
+                  className="inline-flex items-center bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200"
+                >
+                  Book a Demo
+                </Link>
+              </div>
             </div>
-          </div>
+          </FadeIn>
 
         </div>
       </section>
