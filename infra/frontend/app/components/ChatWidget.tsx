@@ -7,8 +7,7 @@ type Message = { role: "user" | "assistant"; content: string }
 
 const WELCOME: Message = {
   role: "assistant",
-  content:
-    "Hi, I'm Lex — Lawrora's assistant. How can I help your firm today? I can walk you through what Lawrora does, answer questions about compliance, integrations, or help you decide if it's a fit.",
+  content: "Hey, I'm Lex. Ask me anything about Lawrora.",
 }
 
 export default function ChatWidget() {
@@ -61,22 +60,20 @@ export default function ChatWidget() {
     <>
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-5 z-50 w-[360px] max-h-[540px] flex flex-col rounded-2xl bg-white shadow-2xl border border-[#0E0E2C]/10 animate-scale-in overflow-hidden">
+        <div className="fixed bottom-24 right-5 z-50 w-[360px] max-h-[540px] flex flex-col rounded-2xl bg-[#0a0a0a] shadow-2xl border border-white/10 animate-scale-in overflow-hidden">
 
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-[#0E0E2C] shrink-0">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-                <Scale size={15} strokeWidth={2} className="text-white" />
-              </div>
+              <Scale size={18} strokeWidth={2} className="text-white" />
               <div>
                 <p className="text-sm font-bold text-white leading-none">Lex</p>
-                <p className="text-[10px] text-white/45 mt-0.5">Lawrora Assistant</p>
+                <p className="text-[10px] text-white/40 mt-0.5">Lawrora Assistant</p>
               </div>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white"
+              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/50 hover:text-white"
               aria-label="Close chat"
             >
               <X size={15} strokeWidth={2} />
@@ -91,8 +88,8 @@ export default function ChatWidget() {
                   className={[
                     "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
                     msg.role === "user"
-                      ? "bg-[#0E0E2C] text-white rounded-br-sm"
-                      : "bg-[#F8F7F2] text-[#0E0E2C] rounded-bl-sm",
+                      ? "bg-white text-black rounded-br-sm"
+                      : "bg-white/8 text-white rounded-bl-sm",
                   ].join(" ")}
                 >
                   {msg.content}
@@ -101,11 +98,11 @@ export default function ChatWidget() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-[#F8F7F2] rounded-2xl rounded-bl-sm px-4 py-3">
+                <div className="bg-white/8 rounded-2xl rounded-bl-sm px-4 py-3">
                   <div className="flex gap-1.5 items-center h-4">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#0E0E2C]/30 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#0E0E2C]/30 animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#0E0E2C]/30 animate-bounce" style={{ animationDelay: "300ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce" style={{ animationDelay: "300ms" }} />
                   </div>
                 </div>
               </div>
@@ -114,8 +111,8 @@ export default function ChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="px-4 pb-4 pt-2 border-t border-[#0E0E2C]/6 shrink-0">
-            <div className="flex items-end gap-2 rounded-xl border border-[#0E0E2C]/12 bg-[#F8F7F2] px-3 py-2.5">
+          <div className="px-4 pb-4 pt-2 border-t border-white/8 shrink-0">
+            <div className="flex items-end gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
               <textarea
                 ref={inputRef}
                 rows={1}
@@ -123,13 +120,13 @@ export default function ChatWidget() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKey}
                 placeholder="Ask about Lawrora…"
-                className="flex-1 bg-transparent text-sm text-[#0E0E2C] placeholder:text-[#0E0E2C]/30 resize-none focus:outline-none max-h-24"
+                className="flex-1 bg-transparent text-sm text-white placeholder:text-white/30 resize-none focus:outline-none max-h-24"
                 style={{ lineHeight: "1.5" }}
               />
               <button
                 onClick={send}
                 disabled={!input.trim() || loading}
-                className="shrink-0 w-8 h-8 rounded-lg bg-[#0E0E2C] flex items-center justify-center text-white disabled:opacity-30 transition-opacity hover:bg-[#0E0E2C]/80"
+                className="shrink-0 w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black disabled:opacity-30 transition-opacity hover:bg-white/90"
                 aria-label="Send"
               >
                 <Send size={14} strokeWidth={2} />
@@ -142,13 +139,13 @@ export default function ChatWidget() {
       {/* Floating trigger */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-2xl bg-[#0E0E2C] shadow-xl flex items-center justify-center hover:bg-[#0E0E2C]/85 transition-all duration-200 hover:-translate-y-0.5"
+        className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-2xl bg-white shadow-xl flex items-center justify-center hover:bg-black hover:text-white border border-black hover:border-white transition-all duration-200"
         aria-label={open ? "Close chat" : "Chat with Lex"}
       >
         {open ? (
-          <X size={20} strokeWidth={2} className="text-white" />
+          <X size={20} strokeWidth={2} className="text-black group-hover:text-white" />
         ) : (
-          <Scale size={20} strokeWidth={1.8} className="text-white" />
+          <Scale size={20} strokeWidth={1.8} className="text-black" />
         )}
       </button>
     </>
