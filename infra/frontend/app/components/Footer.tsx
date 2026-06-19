@@ -62,14 +62,8 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                <Scale size={15} strokeWidth={2} className="text-white/80" />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-lg font-bold tracking-tight">LAWRORA</span>
-                <span className="text-[9px] font-semibold tracking-widest text-white/30 uppercase">Legal Ease</span>
-              </div>
+            <Link href="/" className="inline-flex items-center mb-4">
+              <Scale size={25} strokeWidth={2} className="text-white" />
             </Link>
             <p className="text-sm text-white/45 max-w-xs leading-relaxed mb-6">
               The AI paralegal for modern law firms. Helps lawyers capture and convert every lead, and connects every client with the right attorney — automatically.
