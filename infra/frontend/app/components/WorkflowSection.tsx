@@ -258,7 +258,7 @@ export default function WorkflowSection() {
 
           <Link
             href="/demo"
-            className="inline-block bg-white text-black px-7 py-3 text-sm font-semibold hover:bg-white/90 transition-colors w-fit"
+            className="inline-block bg-white text-black px-7 py-3 text-sm font-semibold hover:bg-black hover:text-white transition-colors w-fit"
           >
             Book a Demo
           </Link>

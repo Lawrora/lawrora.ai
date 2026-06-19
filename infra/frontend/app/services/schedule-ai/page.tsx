@@ -50,7 +50,7 @@ export default function ScheduleAI() {
               <p className="text-base text-white/50 leading-relaxed mb-8 max-w-lg">
                 Schedule AI monitors filing deadlines, manages attorney calendars, logs time entries, and alerts the team before anything slips, all without manual input.
               </p>
-              <Link href="/demo" className="inline-block bg-white text-black px-7 py-3 text-sm font-semibold hover:bg-white/90 transition-colors">
+              <Link href="/demo" className="inline-block bg-white text-black px-7 py-3 text-sm font-semibold hover:bg-black hover:text-white transition-colors">
                 Book a Demo
               </Link>
             </div>
@@ -94,7 +94,7 @@ export default function ScheduleAI() {
       <section className="py-16 px-8 text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Ready to see it live?</p>
         <h2 className="text-2xl font-bold mb-6">See Schedule AI manage a live matter in 30 minutes.</h2>
-        <Link href="/demo" className="inline-block bg-white text-black px-8 py-3 text-sm font-semibold hover:bg-white/90 transition-colors">
+        <Link href="/demo" className="inline-block bg-white text-black px-8 py-3 text-sm font-semibold hover:bg-black hover:text-white transition-colors">
           Book a Demo
         </Link>
       </section>

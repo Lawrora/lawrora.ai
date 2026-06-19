@@ -84,7 +84,7 @@ export default function Services() {
               <div>
                 <Link
                   href="/demo"
-                  className="inline-flex items-center bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200"
+                  className="inline-flex items-center bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-black hover:text-white transition-colors duration-200"
                 >
                   Book a Demo
                 </Link>

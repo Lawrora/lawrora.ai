@@ -102,7 +102,7 @@ export default function Home() {
             </FadeIn>
           </div>
           <FadeIn delay={300}>
-            <Link href="/demo" className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 text-sm font-bold tracking-wide hover:bg-black/85 transition-colors duration-200">
+            <Link href="/demo" className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 text-sm font-bold tracking-wide hover:bg-white hover:text-black transition-colors duration-200">
               Book a Demo →
             </Link>
           </FadeIn>
@@ -124,7 +124,7 @@ export default function Home() {
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
                 What we offer
               </h2>
-              <Link href="/services" className="inline-flex items-center self-start bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200">
+              <Link href="/services" className="inline-flex items-center self-start bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-black hover:text-white transition-colors duration-200">
                 Services
               </Link>
             </FadeIn>

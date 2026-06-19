@@ -261,7 +261,7 @@ export default function DemoPageForm() {
         className={[
           "w-full flex items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-bold transition-all duration-200",
           isReady && status !== "loading"
-            ? "bg-white text-black hover:bg-white/90 hover:-translate-y-0.5 cursor-pointer"
+            ? "bg-white text-black hover:bg-black hover:text-white hover:-translate-y-0.5 cursor-pointer"
             : "bg-white/10 text-white/35 cursor-not-allowed",
         ].join(" ")}
       >

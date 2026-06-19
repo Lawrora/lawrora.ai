@@ -40,7 +40,6 @@ const products = [
 
 const navLinks = [
   { label: "Solutions", href: "/solutions" },
-  { label: "Use Cases", href: "/use-cases" },
   { label: "Resources", href: "/resources" },
 ]
 
@@ -138,7 +137,7 @@ export default function Header() {
 
             <Link
               href="/demo"
-              className="inline-flex items-center px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-white/90 transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-black hover:text-white transition-all duration-200 hover:-translate-y-0.5"
             >
               Book a Demo
             </Link>
