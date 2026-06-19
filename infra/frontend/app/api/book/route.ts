@@ -1,11 +1,51 @@
 import { NextRequest, NextResponse } from "next/server"
 
+const ADMIN_EMAIL = "admin@lawrora.com"
+
 function escHtml(s: string) {
   return String(s)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
+}
+
+function buildIcs(params: {
+  uid: string
+  dateStr: string   // e.g. "Monday, January 6, 2026"
+  timeStr: string   // e.g. "10:00 AM"
+  firmName: string
+  attendeeEmail: string
+  attendeeName: string
+}): string {
+  const { uid, dateStr, timeStr, firmName, attendeeEmail, attendeeName } = params
+
+  // Parse "Monday, January 6, 2026" + "10:00 AM" into a JS Date (local time)
+  const clean = dateStr.replace(/^[A-Za-z]+,\s*/, "")
+  const start = new Date(`${clean} ${timeStr}`)
+  const end = new Date(start.getTime() + 60 * 60 * 1000) // +1 hour
+
+  function fmt(d: Date) {
+    return d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
+  }
+
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Lawrora//Demo Booking//EN",
+    "METHOD:REQUEST",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${fmt(new Date())}`,
+    `DTSTART:${fmt(start)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:Lawrora Demo — ${firmName}`,
+    `ORGANIZER;CN=Lawrora:MAILTO:${ADMIN_EMAIL}`,
+    `ATTENDEE;CN=${attendeeName};ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:${attendeeEmail}`,
+    "DESCRIPTION:30-minute live Lawrora product demo.",
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n")
 }
 
 export async function POST(req: NextRequest) {
@@ -19,6 +59,16 @@ export async function POST(req: NextRequest) {
   if (!firstName || !lastName || !email || !firm || !practiceArea || !teamSize || !date || !time) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
+
+  const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@lawrora.ai`
+  const ics = buildIcs({
+    uid,
+    dateStr: date,
+    timeStr: time,
+    firmName: firm,
+    attendeeEmail: email,
+    attendeeName: `${firstName} ${lastName}`,
+  })
 
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"></head>
@@ -42,7 +92,7 @@ export async function POST(req: NextRequest) {
     ${message ? `<tr><td style="padding:11px 0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;vertical-align:top">Pain Point</td><td style="padding:11px 0;font-size:14px;line-height:1.6">${escHtml(message)}</td></tr>` : ""}
   </table>
 
-  <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.ai/demo</p>
+  <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.ai/demo — calendar invite attached</p>
 </body></html>`
 
   const res = await fetch("https://api.mailersend.com/v1/email", {
@@ -54,7 +104,7 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       from: { email: process.env.MAILERSEND_FROM_EMAIL, name: "Lawrora" },
-      to: [{ email: process.env.MAILERSEND_TO_EMAIL }],
+      to: [{ email: ADMIN_EMAIL }],
       reply_to: {
         email: escHtml(email),
         name: `${escHtml(firstName)} ${escHtml(lastName)}`,
@@ -62,6 +112,14 @@ export async function POST(req: NextRequest) {
       subject: `Demo booked: ${firstName} ${lastName} from ${firm} — ${date} at ${time}`,
       html,
       text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
+      attachments: [
+        {
+          filename: "lawrora-demo.ics",
+          content: Buffer.from(ics).toString("base64"),
+          type: "text/calendar",
+          disposition: "attachment",
+        },
+      ],
     }),
   })
 

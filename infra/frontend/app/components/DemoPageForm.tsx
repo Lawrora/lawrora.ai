@@ -276,7 +276,7 @@ export default function DemoPageForm() {
       </button>
 
       <p className="text-center text-xs text-white/25">
-        No commitment. No credit card. Just 30 focused minutes.
+        No commitment. Just 30 focused minutes.
       </p>
     </form>
   )
