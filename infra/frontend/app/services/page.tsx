@@ -63,8 +63,8 @@ export default function Services() {
 
           {services.map(({ name, href, desc }, i) => (
             <FadeIn key={name} delay={0}>
-              <div className="border-t border-white/10 py-12 grid grid-cols-2 gap-12 items-start">
-                <span className="text-4xl md:text-[2.8rem] font-bold text-white/30 tabular-nums leading-none">
+              <div className="border-t border-white/10 min-h-[50vh] py-12 grid grid-cols-2 gap-12 items-start">
+                <span className="text-[5.6rem] md:text-[5.6rem] font-bold text-white/30 tabular-nums leading-none">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
@@ -79,7 +79,7 @@ export default function Services() {
 
           {/* CTA row */}
           <FadeIn>
-            <div className="border-t border-white/10 py-12 grid grid-cols-2 gap-12 items-center">
+            <div className="border-t border-white/10 min-h-[50vh] py-12 grid grid-cols-2 gap-12 items-center">
               <h2 className="text-3xl md:text-4xl font-bold text-white">Reach out today</h2>
               <div>
                 <Link
