@@ -55,7 +55,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white px-8 py-16 border-t border-white/6">
+    <footer className="bg-black text-white border border-white px-8 py-16 border-t border-white/6">
       <div className="mx-auto max-w-7xl">
 
 <div className="grid grid-cols-1 md:grid-cols-5 gap-10">

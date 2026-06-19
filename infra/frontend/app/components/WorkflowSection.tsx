@@ -67,7 +67,7 @@ function StepVisual({ index }: { index: number }) {
         { role: "client", text: "ER visit and physical therapy." },
       ].map((msg, i) => (
         <div key={i} className={`flex ${msg.role === "client" ? "justify-end" : ""}`}>
-          <div className={`text-xs px-3 py-2 rounded-xl max-w-[80%] leading-relaxed ${msg.role === "ai" ? "bg-white/8 text-white/80 border border-white/10" : "bg-white text-black"}`}>
+          <div className={`text-xs px-3 py-2 rounded-xl max-w-[80%] leading-relaxed ${msg.role === "ai" ? "bg-white/8 text-white/80 border border-white/10" : "bg-white text-black border border-black"}`}>
             {msg.text}
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function WorkflowSection() {
 
           <Link
             href="/demo"
-            className="inline-block bg-white text-black px-7 py-3 text-sm font-semibold hover:bg-black hover:text-white transition-colors w-fit"
+            className="inline-block bg-white text-black border border-black px-7 py-3 text-sm font-semibold hover:bg-black hover:text-white hover:border-white transition-colors w-fit"
           >
             Book a Demo
           </Link>

@@ -102,7 +102,7 @@ export default function Home() {
             </FadeIn>
           </div>
           <FadeIn delay={300}>
-            <Link href="/demo" className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 text-sm font-bold tracking-wide hover:bg-white hover:text-black transition-colors duration-200">
+            <Link href="/demo" className="inline-flex items-center gap-2 bg-black text-white border border-white px-8 py-4 text-sm font-bold tracking-wide hover:bg-white hover:text-black hover:border-black transition-colors duration-200">
               Book a Demo →
             </Link>
           </FadeIn>
@@ -117,14 +117,14 @@ export default function Home() {
       />
 
       {/* ── What we offer ────────────────────────────────────── */}
-      <section className="min-h-screen bg-black text-white flex flex-col justify-center px-8 md:px-16 lg:px-24 py-24">
+      <section className="min-h-screen bg-black text-white border border-white flex flex-col justify-center px-8 md:px-16 lg:px-24 py-24">
         <div className="mx-auto max-w-7xl w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch">
             <FadeIn className="flex flex-col justify-between">
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
                 What we offer
               </h2>
-              <Link href="/services" className="inline-flex items-center self-start bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-black hover:text-white transition-colors duration-200">
+              <Link href="/services" className="inline-flex items-center self-start bg-white text-black border border-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-black hover:text-white hover:border-white transition-colors duration-200">
                 Services
               </Link>
             </FadeIn>

@@ -72,7 +72,7 @@ export default function Solutions() {
 
       <section className="py-16 px-8 bg-white/4 border-t border-white/6 text-center">
         <h2 className="text-2xl font-bold mb-4">See how Lawrora fits your team</h2>
-        <Link href="/demo" className="inline-block bg-white text-black px-8 py-3 text-sm font-semibold hover:bg-black hover:text-white transition-colors">
+        <Link href="/demo" className="inline-block bg-white text-black border border-black px-8 py-3 text-sm font-semibold hover:bg-black hover:text-white hover:border-white transition-colors">
           Book a Demo
         </Link>
       </section>

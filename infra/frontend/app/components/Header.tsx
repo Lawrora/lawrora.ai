@@ -137,7 +137,7 @@ export default function Header() {
 
             <Link
               href="/demo"
-              className="inline-flex items-center px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-black hover:text-white transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center px-5 py-2 text-sm font-semibold bg-white text-black border border-black hover:bg-black hover:text-white hover:border-white transition-all duration-200 hover:-translate-y-0.5"
             >
               Book a Demo
             </Link>
