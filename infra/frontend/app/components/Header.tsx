@@ -75,14 +75,8 @@ export default function Header() {
         <div className="w-full flex items-center justify-between pl-7 pr-5 py-3">
 
           {/* Logo — always left */}
-          <Link href="/" className="flex items-center gap-2.5 leading-none shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
-              <Scale size={15} strokeWidth={2} className="text-white" />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="text-xl font-bold tracking-tight text-white">LAWRORA</span>
-              <span className="text-[9px] font-semibold tracking-widest uppercase text-white/50">Legal Ease</span>
-            </div>
+          <Link href="/" className="flex items-center leading-none shrink-0">
+            <Scale size={25} strokeWidth={2} className="text-white" />
           </Link>
 
           {/* Desktop: nav + CTA grouped on the right */}

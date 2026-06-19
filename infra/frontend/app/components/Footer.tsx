@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Scale, ShieldCheck, Lock } from "lucide-react"
+import { Scale } from "lucide-react"
 
 const productLinks = [
   { label: "Lead AI",      href: "/products/lead-ai" },
@@ -58,27 +58,7 @@ export default function Footer() {
     <footer className="bg-black text-white px-8 py-16 border-t border-white/6">
       <div className="mx-auto max-w-7xl">
 
-        {/* Trust badges */}
-        <div className="flex flex-wrap gap-3 mb-12 pb-10 border-b border-white/8">
-          <div className="flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-xs font-medium text-white/60">
-            <ShieldCheck size={13} strokeWidth={2} className="text-emerald-400 shrink-0" />
-            HIPAA Compliant
-          </div>
-          <div className="flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-xs font-medium text-white/60">
-            <ShieldCheck size={13} strokeWidth={2} className="text-blue-400 shrink-0" />
-            SOC 2 Type II
-          </div>
-          <div className="flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-xs font-medium text-white/60">
-            <Lock size={13} strokeWidth={2} className="text-violet-400 shrink-0" />
-            256-bit AES Encryption
-          </div>
-          <div className="flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-xs font-medium text-white/60">
-            <ShieldCheck size={13} strokeWidth={2} className="text-amber-400 shrink-0" />
-            Zero Model Training on Client Data
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
+<div className="grid grid-cols-1 md:grid-cols-5 gap-10">
 
           {/* Brand */}
           <div className="md:col-span-2">
