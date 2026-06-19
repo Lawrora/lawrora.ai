@@ -139,13 +139,13 @@ export default function ChatWidget() {
       {/* Floating trigger */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-2xl bg-white shadow-xl flex items-center justify-center hover:bg-black hover:text-white border border-black hover:border-white transition-all duration-200"
+        className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-2xl bg-white text-black shadow-xl flex items-center justify-center hover:bg-black hover:text-white border border-black hover:border-white transition-all duration-200"
         aria-label={open ? "Close chat" : "Chat with Lex"}
       >
         {open ? (
-          <X size={20} strokeWidth={2} className="text-black group-hover:text-white" />
+          <X size={20} strokeWidth={2} />
         ) : (
-          <Scale size={20} strokeWidth={1.8} className="text-black" />
+          <Scale size={20} strokeWidth={1.8} />
         )}
       </button>
     </>
