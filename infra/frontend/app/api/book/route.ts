@@ -95,39 +95,75 @@ export async function POST(req: NextRequest) {
   <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.ai/demo — calendar invite attached</p>
 </body></html>`
 
-  const res = await fetch("https://api.mailersend.com/v1/email", {
+  const mailerHeaders = {
+    Authorization: `Bearer ${process.env.MAILERSEND_API_KEY}`,
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+  }
+
+  const icsAttachment = {
+    filename: "lawrora-demo.ics",
+    content: Buffer.from(ics).toString("base64"),
+    type: "text/calendar",
+    disposition: "attachment",
+  }
+
+  // Email 1: admin notification with full details + calendar invite
+  const adminRes = await fetch("https://api.mailersend.com/v1/email", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.MAILERSEND_API_KEY}`,
-      "Content-Type": "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-    },
+    headers: mailerHeaders,
     body: JSON.stringify({
       from: { email: process.env.MAILERSEND_FROM_EMAIL, name: "Lawrora" },
       to: [{ email: ADMIN_EMAIL }],
-      reply_to: {
-        email: escHtml(email),
-        name: `${escHtml(firstName)} ${escHtml(lastName)}`,
-      },
+      reply_to: { email: escHtml(email), name: `${escHtml(firstName)} ${escHtml(lastName)}` },
       subject: `Demo booked: ${firstName} ${lastName} from ${firm} — ${date} at ${time}`,
       html,
       text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
-      attachments: [
-        {
-          filename: "lawrora-demo.ics",
-          content: Buffer.from(ics).toString("base64"),
-          type: "text/calendar",
-          disposition: "attachment",
-        },
-      ],
+      attachments: [icsAttachment],
     }),
   })
 
-  if (!res.ok) {
-    const err = await res.text()
-    console.error("MailerSend error:", err)
+  if (!adminRes.ok) {
+    const err = await adminRes.text()
+    console.error("MailerSend admin error:", err)
     return NextResponse.json({ error: "Failed to send confirmation" }, { status: 500 })
   }
+
+  // Email 2: confirmation to the booker with calendar invite
+  const confirmHtml = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="font-family:Arial,sans-serif;color:#0e0e2c;max-width:600px;margin:0 auto;padding:32px 24px">
+  <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:12px">Lawrora</p>
+  <h1 style="font-size:22px;font-weight:700;margin:0 0 8px">You're booked, ${escHtml(firstName)}.</h1>
+  <p style="font-size:14px;color:#666;margin:0 0 28px">We're looking forward to showing you Lawrora live. Here are your details.</p>
+
+  <div style="background:#f8f7f2;border-radius:12px;padding:20px 24px;margin-bottom:24px">
+    <p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin:0 0 4px">Your demo is scheduled for</p>
+    <p style="font-size:18px;font-weight:700;color:#0e0e2c;margin:0">${escHtml(date)} at ${escHtml(time)}</p>
+  </div>
+
+  <p style="font-size:14px;color:#666;line-height:1.6;margin:0 0 24px">
+    A calendar invite is attached to this email — open it to add the event to your calendar. We'll reach out shortly to confirm the meeting link.
+  </p>
+
+  <p style="font-size:13px;color:#999;margin:0">Questions? Reply to this email and we'll get back to you right away.</p>
+
+  <p style="margin-top:40px;font-size:11px;color:#bbb">Lawrora · lawrora.ai</p>
+</body></html>`
+
+  await fetch("https://api.mailersend.com/v1/email", {
+    method: "POST",
+    headers: mailerHeaders,
+    body: JSON.stringify({
+      from: { email: process.env.MAILERSEND_FROM_EMAIL, name: "Lawrora" },
+      to: [{ email: escHtml(email), name: `${escHtml(firstName)} ${escHtml(lastName)}` }],
+      reply_to: { email: ADMIN_EMAIL, name: "Lawrora" },
+      subject: `Your Lawrora demo is confirmed — ${date} at ${time}`,
+      html: confirmHtml,
+      text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.\n\nA calendar invite is attached. We'll send the meeting link shortly.\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.ai`,
+      attachments: [icsAttachment],
+    }),
+  })
 
   return NextResponse.json({ ok: true })
 }
