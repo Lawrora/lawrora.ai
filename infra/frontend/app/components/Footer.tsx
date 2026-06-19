@@ -2,11 +2,11 @@ import Link from "next/link"
 import { Scale } from "lucide-react"
 
 const productLinks = [
-  { label: "Lead AI",      href: "/products/lead-ai" },
-  { label: "Match AI",     href: "/products/match-ai" },
-  { label: "Draft AI",     href: "/products/draft-ai" },
-  { label: "Counsel AI",   href: "/products/counsel-ai" },
-  { label: "Schedule AI",  href: "/products/schedule-ai" },
+  { label: "Lead AI",      href: "/services/lead-ai" },
+  { label: "Match AI",     href: "/services/match-ai" },
+  { label: "Draft AI",     href: "/services/draft-ai" },
+  { label: "Counsel AI",   href: "/services/counsel-ai" },
+  { label: "Schedule AI",  href: "/services/schedule-ai" },
 ]
 
 const companyLinks = [
@@ -92,7 +92,7 @@ export default function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-white/35 mb-5">Products</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-white/35 mb-5">Services</h4>
             <ul className="space-y-3">
               {productLinks.map(({ label, href }) => (
                 <li key={label}>

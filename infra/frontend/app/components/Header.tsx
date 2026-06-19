@@ -9,31 +9,31 @@ const products = [
   {
     name: "Lead AI",
     desc: "Captures and qualifies leads from call, text, or web, 24/7.",
-    href: "/products/lead-ai",
+    href: "/services/lead-ai",
     icon: <Phone size={14} strokeWidth={2} className="text-white/60" />,
   },
   {
     name: "Match AI",
     desc: "Recommends the right attorney to every prospective client instantly.",
-    href: "/products/match-ai",
+    href: "/services/match-ai",
     icon: <UserCheck size={14} strokeWidth={2} className="text-white/60" />,
   },
   {
     name: "Draft AI",
     desc: "Generates demand letters, agreements, and filings in seconds.",
-    href: "/products/draft-ai",
+    href: "/services/draft-ai",
     icon: <FileText size={14} strokeWidth={2} className="text-white/60" />,
   },
   {
     name: "Counsel AI",
     desc: "Gives attorneys research, precedents, and AI-suggested next steps.",
-    href: "/products/counsel-ai",
+    href: "/services/counsel-ai",
     icon: <BookOpen size={14} strokeWidth={2} className="text-white/60" />,
   },
   {
     name: "Schedule AI",
     desc: "Manages attorney calendars, deadlines, and client coordination.",
-    href: "/products/schedule-ai",
+    href: "/services/schedule-ai",
     icon: <CalendarCheck size={14} strokeWidth={2} className="text-white/60" />,
   },
 ]
@@ -90,10 +90,10 @@ export default function Header() {
                 onMouseLeave={() => setProductsOpen(false)}
               >
                 <Link
-                  href="/products"
+                  href="/services"
                   className="flex items-center gap-1 transition-colors px-4 py-2 rounded-lg hover:text-white hover:bg-white/10"
                 >
-                  Products
+                  Services
                   <ChevronDown
                     size={12}
                     strokeWidth={2.5}
@@ -159,7 +159,7 @@ export default function Header() {
         {mobileOpen && (
           <div className="md:hidden bg-[#0a0a0a] border-t border-white/8 px-5 pt-5 pb-6 animate-fade-in">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-white/35 mb-3 px-3">
-              Products
+              Services
             </p>
             <div className="space-y-1 mb-5">
               {products.map((p) => (

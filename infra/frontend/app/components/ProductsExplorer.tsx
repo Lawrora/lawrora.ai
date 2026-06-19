@@ -211,7 +211,7 @@ export default function ProductsExplorer() {
               ))}
             </ul>
             <Link
-              href={`/products/${p.id}`}
+              href={`/services/${p.id}`}
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0E0E2C] hover:opacity-70 transition-opacity"
             >
               See full product page

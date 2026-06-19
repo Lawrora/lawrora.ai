@@ -124,12 +124,12 @@ export default function Home() {
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
                 What we offer
               </h2>
-              <Link href="/products" className="inline-flex items-center self-start bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200">
+              <Link href="/services" className="inline-flex items-center self-start bg-white text-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-white/90 transition-colors duration-200">
                 Services
               </Link>
             </FadeIn>
             <ul className="space-y-4">
-              {["Lead AI", "Match AI", "Draft AI", "Counsel AI", "Schedule AI"].map((name, i) => (
+              {["Lead Intake", "Case Matching", "Demand Drafting", "Legal Research", "Appointment Scheduling","Firm Automation"].map((name, i) => (
                 <FadeIn key={name} delay={i * 80}>
                   <li className="text-5xl md:text-6xl font-semibold text-white">
                     {name}
