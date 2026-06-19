@@ -111,7 +111,7 @@ export default function DemoPageForm() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-first">
+              <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-first">
                 First name <span className="text-white/25">*</span>
               </label>
               <input
@@ -123,7 +123,7 @@ export default function DemoPageForm() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-last">
+              <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-last">
                 Last name <span className="text-white/25">*</span>
               </label>
               <input
@@ -137,7 +137,7 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-email">
+            <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-email">
               Work email <span className="text-white/25">*</span>
             </label>
             <input
@@ -150,8 +150,8 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-phone">
-              Phone <span className="text-[#0E0E2C]/25">(optional)</span>
+            <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-phone">
+              Phone <span className="text-white/35">(optional)</span>
             </label>
             <input
               id="demo-phone" type="tel"
@@ -163,7 +163,7 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-firm">
+            <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-firm">
               Firm name <span className="text-white/25">*</span>
             </label>
             <input
@@ -177,7 +177,7 @@ export default function DemoPageForm() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="relative">
-              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-area">
+              <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-area">
                 Practice area <span className="text-white/25">*</span>
               </label>
               <select
@@ -191,7 +191,7 @@ export default function DemoPageForm() {
               </select>
             </div>
             <div className="relative">
-              <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-size">
+              <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-size">
                 Team size <span className="text-white/25">*</span>
               </label>
               <select
@@ -207,9 +207,9 @@ export default function DemoPageForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/50 mb-1.5" htmlFor="demo-msg">
+            <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-msg">
               What&apos;s your biggest intake or admin pain point?{" "}
-              <span className="text-[#0E0E2C]/25">(optional)</span>
+              <span className="text-white/35">(optional)</span>
             </label>
             <textarea
               id="demo-msg" rows={3}
