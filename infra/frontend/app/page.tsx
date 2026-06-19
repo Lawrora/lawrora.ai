@@ -117,7 +117,7 @@ export default function Home() {
       />
 
       {/* ── What we offer ────────────────────────────────────── */}
-      <section className="min-h-screen bg-black text-white border border-white flex flex-col justify-center px-8 md:px-16 lg:px-24 py-24">
+      <section className="min-h-screen bg-black text-white flex flex-col justify-center px-8 md:px-16 lg:px-24 py-24">
         <div className="mx-auto max-w-7xl w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch">
             <FadeIn className="flex flex-col justify-between">
