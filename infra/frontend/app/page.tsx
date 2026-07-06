@@ -14,7 +14,7 @@ import Footer from "./components/Footer"
 import FadeIn from "./components/FadeIn"
 
 export const metadata: Metadata = {
-  title: "AI Paralegal for Law Firms — Capture Leads, Match Clients, Draft Documents",
+  title: "Lawrora",
   description:
     "Lawrora captures every inbound lead 24/7, qualifies clients with AI, matches them to the right attorney, and drafts legal documents in seconds. HIPAA & SOC 2 compliant. Purpose-built for law firms.",
   alternates: { canonical: "https://lawrora.ai" },
