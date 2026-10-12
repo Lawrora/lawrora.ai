@@ -1,41 +1,23 @@
-import { createSign } from "node:crypto"
-
-// Creates Google Calendar events with a Google Meet link, using a service account with
-// domain-wide delegation that acts as GOOGLE_CALENDAR_USER (a Workspace user).
+// Creates Google Calendar events with a Google Meet link on the calendar of the Google account that
+// authorised the OAuth client (admin@lawrora.com), using its long-lived refresh token.
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token"
-const SCOPE = "https://www.googleapis.com/auth/calendar.events"
-
-const b64url = (input: string | Buffer) => Buffer.from(input).toString("base64url")
 
 export function googleCalendarConfigured() {
-  return Boolean(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_SERVICE_ACCOUNT_KEY)
+  return Boolean(
+    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_REFRESH_TOKEN
+  )
 }
 
-async function getAccessToken(subject: string): Promise<string> {
-  const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!
-  // Vercel env vars usually store the PEM with literal "\n" sequences
-  const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY!.replace(/\\n/g, "\n")
-
-  const now = Math.floor(Date.now() / 1000)
-  const header = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))
-  const claims = b64url(JSON.stringify({
-    iss: clientEmail,
-    sub: subject,
-    scope: SCOPE,
-    aud: TOKEN_URL,
-    iat: now,
-    exp: now + 3600,
-  }))
-  const signature = createSign("RSA-SHA256").update(`${header}.${claims}`).sign(privateKey)
-  const assertion = `${header}.${claims}.${b64url(signature)}`
-
+async function getAccessToken(): Promise<string> {
   const res = await fetch(TOKEN_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion,
+      grant_type: "refresh_token",
+      client_id: process.env.GOOGLE_CLIENT_ID!,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN!,
     }),
   })
   if (!res.ok) throw new Error(`Google token error: ${await res.text()}`)
@@ -51,8 +33,7 @@ export async function createMeetEvent(params: {
   timeZone: string
   attendee: { email: string; name: string }
 }): Promise<{ eventId: string; meetLink: string }> {
-  const calendarUser = process.env.GOOGLE_CALENDAR_USER || "admin@lawrora.com"
-  const token = await getAccessToken(calendarUser)
+  const token = await getAccessToken()
 
   // sendUpdates=all makes Google email the invite (with the Meet link) to the attendee
   const res = await fetch(
