@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
+import { sendEmail } from "@/app/lib/email"
+
+const ADMIN_EMAIL = "admin@lawrora.com"
 
 function escHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -21,26 +24,16 @@ export async function POST(req: NextRequest) {
   <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.com</p>
 </body></html>`
 
-  const res = await fetch("https://api.mailersend.com/v1/email", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.MAILERSEND_API_KEY}`,
-      "Content-Type": "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-    },
-    body: JSON.stringify({
-      from: { email: process.env.MAILERSEND_FROM_EMAIL, name: "Lawrora" },
-      to: [{ email: process.env.MAILERSEND_TO_EMAIL }],
-      reply_to: { email: escHtml(email), name: `${escHtml(firstName)} ${escHtml(lastName)}` },
-      subject: `Demo request: ${firstName} ${lastName} from ${firm}`,
-      html,
-      text: `New demo request\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nFirm: ${firm}${message ? `\nNote: ${message}` : ""}`,
-    }),
+  const result = await sendEmail({
+    to: ADMIN_EMAIL,
+    replyTo: `${firstName} ${lastName} <${email}>`,
+    subject: `Demo request: ${firstName} ${lastName} from ${firm}`,
+    html,
+    text: `New demo request\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nFirm: ${firm}${message ? `\nNote: ${message}` : ""}`,
   })
 
-  if (!res.ok) {
-    const err = await res.text()
-    console.error("MailerSend error:", err)
+  if (!result.ok) {
+    console.error("Resend error:", result.error)
     return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
   }
 

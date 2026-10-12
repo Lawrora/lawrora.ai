@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { sendEmail } from "@/app/lib/email"
 
 const ADMIN_EMAIL = "admin@lawrora.com"
 
@@ -107,37 +108,24 @@ export async function POST(req: NextRequest) {
   <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.ai/demo — calendar invite attached</p>
 </body></html>`
 
-  const mailerHeaders = {
-    Authorization: `Bearer ${process.env.MAILERSEND_API_KEY}`,
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-  }
-
   const icsAttachment = {
     filename: "lawrora-demo.ics",
     content: Buffer.from(ics).toString("base64"),
-    type: "text/calendar",
-    disposition: "attachment",
+    contentType: "text/calendar; method=REQUEST",
   }
 
   // Email 1: admin notification with full details + calendar invite
-  const adminRes = await fetch("https://api.mailersend.com/v1/email", {
-    method: "POST",
-    headers: mailerHeaders,
-    body: JSON.stringify({
-      from: { email: process.env.MAILERSEND_FROM_EMAIL, name: "Lawrora" },
-      to: [{ email: ADMIN_EMAIL }],
-      reply_to: { email: escHtml(email), name: `${escHtml(firstName)} ${escHtml(lastName)}` },
-      subject: `Demo booked: ${firstName} ${lastName} from ${firm} — ${date} at ${time}`,
-      html,
-      text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nLocation: ${location}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
-      attachments: [icsAttachment],
-    }),
+  const admin = await sendEmail({
+    to: ADMIN_EMAIL,
+    replyTo: `${firstName} ${lastName} <${email}>`,
+    subject: `Demo booked: ${firstName} ${lastName} from ${firm}, ${date} at ${time}`,
+    html,
+    text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nLocation: ${location}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
+    attachments: [icsAttachment],
   })
 
-  if (!adminRes.ok) {
-    const err = await adminRes.text()
-    console.error("MailerSend admin error:", err)
+  if (!admin.ok) {
+    console.error("Resend admin email error:", admin.error)
     return NextResponse.json({ error: "Failed to send confirmation" }, { status: 500 })
   }
 
@@ -163,24 +151,19 @@ export async function POST(req: NextRequest) {
   <p style="margin-top:40px;font-size:11px;color:#bbb">Lawrora · lawrora.ai</p>
 </body></html>`
 
-  const confirmRes = await fetch("https://api.mailersend.com/v1/email", {
-    method: "POST",
-    headers: mailerHeaders,
-    body: JSON.stringify({
-      from: { email: process.env.MAILERSEND_FROM_EMAIL, name: "Lawrora" },
-      to: [{ email: escHtml(email), name: `${escHtml(firstName)} ${escHtml(lastName)}` }],
-      reply_to: { email: ADMIN_EMAIL, name: "Lawrora" },
-      subject: `Your Lawrora demo is confirmed — ${date} at ${time}`,
-      html: confirmHtml,
-      text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.\n\nA calendar invite is attached. We'll send the meeting link shortly.\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.ai`,
-      attachments: [icsAttachment],
-    }),
+  const confirm = await sendEmail({
+    to: email,
+    replyTo: `Lawrora <${ADMIN_EMAIL}>`,
+    subject: `Your Lawrora demo is confirmed: ${date} at ${time}`,
+    html: confirmHtml,
+    text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.\n\nA calendar invite is attached. We'll send the meeting link shortly.\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.ai`,
+    attachments: [icsAttachment],
   })
 
   // The admin already has the booking, so report a failed confirmation instead of failing the request
-  if (!confirmRes.ok) {
-    console.error("MailerSend confirmation error:", await confirmRes.text())
+  if (!confirm.ok) {
+    console.error("Resend confirmation email error:", confirm.error)
   }
 
-  return NextResponse.json({ ok: true, confirmationSent: confirmRes.ok })
+  return NextResponse.json({ ok: true, confirmationSent: confirm.ok })
 }

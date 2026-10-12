@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https:",
-              "connect-src 'self' https://api.mailersend.com https://*.supabase.co",
+              "connect-src 'self' https://*.supabase.co",
               "frame-ancestors 'none'",
             ].join("; "),
           },
