@@ -24,6 +24,52 @@ async function getAccessToken(): Promise<string> {
   return (await res.json()).access_token
 }
 
+type CalendarEvent = {
+  status?: string
+  transparency?: string
+  eventType?: string
+  start?: { dateTime?: string; date?: string }
+  end?: { dateTime?: string; date?: string }
+  attendees?: { self?: boolean; responseStatus?: string }[]
+}
+
+// Times the calendar owner is busy between timeMin and timeMax. Skips cancelled, "free", and declined
+// events, and all-day events other than out-of-office.
+export async function listBusy(timeMin: Date, timeMax: Date): Promise<{ start: number; end: number }[]> {
+  const token = await getAccessToken()
+  const busy: { start: number; end: number }[] = []
+  let pageToken: string | undefined
+
+  do {
+    const query = new URLSearchParams({
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
+      singleEvents: "true",
+      maxResults: "250",
+      fields: "nextPageToken,items(status,transparency,eventType,start,end,attendees(self,responseStatus))",
+      ...(pageToken && { pageToken }),
+    })
+    const res = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?${query}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) throw new Error(`Google Calendar list error: ${await res.text()}`)
+    const page: { items?: CalendarEvent[]; nextPageToken?: string } = await res.json()
+
+    for (const e of page.items ?? []) {
+      if (e.status === "cancelled" || e.transparency === "transparent") continue
+      if (e.attendees?.some((a) => a.self && a.responseStatus === "declined")) continue
+      const allDay = !e.start?.dateTime
+      if (allDay && e.eventType !== "outOfOffice") continue
+      const start = Date.parse(e.start?.dateTime ?? `${e.start?.date}T00:00:00Z`)
+      const end = Date.parse(e.end?.dateTime ?? `${e.end?.date}T00:00:00Z`)
+      if (!Number.isNaN(start) && !Number.isNaN(end)) busy.push({ start, end })
+    }
+    pageToken = page.nextPageToken
+  } while (pageToken)
+
+  return busy
+}
+
 export async function createMeetEvent(params: {
   requestId: string
   summary: string

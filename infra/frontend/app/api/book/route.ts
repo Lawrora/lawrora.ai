@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sendEmail } from "@/app/lib/email"
-import { createMeetEvent, googleCalendarConfigured } from "@/app/lib/googleCalendar"
+import { createMeetEvent, googleCalendarConfigured, listBusy } from "@/app/lib/googleCalendar"
+import { DEMO_MINUTES, MIN_LEAD_MINUTES, overlapsBusy } from "@/app/lib/demo"
 
 const ADMIN_EMAIL = "admin@lawrora.com"
-const DEMO_MINUTES = 60
 const SITE_URL = "https://lawrora.com"
 
 // Brand mark for emails: the scales icon as a PNG (email clients do not render SVG) next to a live-text wordmark
@@ -91,6 +91,23 @@ export async function POST(req: NextRequest) {
 
   // Create the event on the Lawrora calendar with a unique Meet link. Google sends the invite to the
   // booker; if this is not configured or fails, fall back to the attached .ics invite without a link.
+  // Earliest booking is MIN_LEAD_MINUTES out; allow 30 minutes for the time spent filling in the form
+  if (start.getTime() < Date.now() + (MIN_LEAD_MINUTES - 30) * 60 * 1000) {
+    return NextResponse.json({ error: "too_soon" }, { status: 400 })
+  }
+
+  // Refuse a slot that was taken after the visitor loaded the picker
+  if (googleCalendarConfigured()) {
+    try {
+      const busy = await listBusy(start, new Date(start.getTime() + DEMO_MINUTES * 60 * 1000))
+      if (overlapsBusy(start, busy)) {
+        return NextResponse.json({ error: "slot_taken" }, { status: 409 })
+      }
+    } catch (err) {
+      console.error("Availability check error:", err)
+    }
+  }
+
   let meetLink: string | null = null
   if (googleCalendarConfigured()) {
     try {

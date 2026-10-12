@@ -40,6 +40,8 @@ export default function DemoPageForm() {
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [confirmationSent, setConfirmationSent] = useState(true)
+  const [errorMessage, setErrorMessage] = useState("")
+  const [availabilityKey, setAvailabilityKey] = useState(0)
 
   function set(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }))
@@ -80,12 +82,27 @@ export default function DemoPageForm() {
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         }),
       })
+      const data = await res.json().catch(() => ({}))
       if (res.ok) {
-        const data = await res.json().catch(() => ({}))
         setConfirmationSent(data.confirmationSent !== false)
+        setStatus("success")
+        return
       }
-      setStatus(res.ok ? "success" : "error")
+      if (data.error === "slot_taken" || data.error === "too_soon") {
+        // Clear the slot and re-check the calendar so the visitor can pick another time
+        setSelectedTime("")
+        setAvailabilityKey((k) => k + 1)
+        setErrorMessage(
+          data.error === "slot_taken"
+            ? "Sorry, that time was just booked. Please pick another slot."
+            : "That time is too soon. The earliest booking is 2 hours from now, so please pick a later slot."
+        )
+      } else {
+        setErrorMessage("Something went wrong. Please try again or email us directly.")
+      }
+      setStatus("error")
     } catch {
+      setErrorMessage("Something went wrong. Please try again or email us directly.")
       setStatus("error")
     }
   }
@@ -269,6 +286,7 @@ export default function DemoPageForm() {
           onSelect={handleCalendarSelect}
           selectedDate={selectedDate}
           selectedTime={selectedTime}
+          refreshKey={availabilityKey}
         />
       </div>
 
@@ -288,7 +306,7 @@ export default function DemoPageForm() {
       {/* Error */}
       {status === "error" && (
         <p className="text-xs text-red-500 text-center">
-          Something went wrong. Please try again or email us directly.
+          {errorMessage}
         </p>
       )}
 

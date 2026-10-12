@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight, Clock } from "lucide-react"
+import { MIN_LEAD_MINUTES, overlapsBusy, type BusyInterval } from "@/app/lib/demo"
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const MONTHS = [
@@ -9,26 +10,23 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ]
 
-function generateSlots(date: Date): string[] {
-  const now = new Date()
-  const isToday = date.toDateString() === now.toDateString()
+type Slot = { label: string; start: Date }
+
+// Hourly slots. Weekdays: 9 AM to 7 PM (last start 6 PM), weekends: 9 AM to 5 PM (last start 4 PM)
+function generateSlots(date: Date): Slot[] {
+  const earliest = Date.now() + MIN_LEAD_MINUTES * 60 * 1000
   const day = date.getDay()
   const isWeekend = day === 0 || day === 6
-  // Weekdays: 9am–7pm (slots 9:00–18:30), Weekends: 9am–5pm (slots 9:00–16:30)
   const endHour = isWeekend ? 17 : 19
 
-  const slots: string[] = []
+  const slots: Slot[] = []
   for (let h = 9; h < endHour; h++) {
-    for (const min of [0, 30]) {
-      if (isToday) {
-        const slot = new Date(date)
-        slot.setHours(h, min, 0, 0)
-        if (slot <= now) continue
-      }
-      const h12 = h === 12 ? 12 : h % 12
-      const ap = h >= 12 ? "PM" : "AM"
-      slots.push(`${h12}:${min === 0 ? "00" : "30"} ${ap}`)
-    }
+    const start = new Date(date)
+    start.setHours(h, 0, 0, 0)
+    if (start.getTime() < earliest) continue
+    const h12 = h === 12 ? 12 : h % 12
+    const ap = h >= 12 ? "PM" : "AM"
+    slots.push({ label: `${h12}:00 ${ap}`, start })
   }
   return slots
 }
@@ -46,9 +44,35 @@ type Props = {
   onSelect: (date: Date, time: string) => void
   selectedDate: Date | null
   selectedTime: string | null
+  // Bump to re-check availability, e.g. after a booking was refused because the slot was taken
+  refreshKey?: number
 }
 
-export default function DemoCalendar({ onSelect, selectedDate, selectedTime }: Props) {
+export default function DemoCalendar({ onSelect, selectedDate, selectedTime, refreshKey = 0 }: Props) {
+  // Busy times on the Lawrora calendar for the selected day; `key` says which day/refresh they belong to
+  const [availability, setAvailability] = useState<{ key: string; busy: BusyInterval[] } | null>(null)
+  const dayKey = selectedDate ? `${selectedDate.toDateString()}#${refreshKey}` : null
+
+  useEffect(() => {
+    if (!selectedDate || !dayKey) return
+    let cancelled = false
+    const from = new Date(selectedDate)
+    from.setHours(0, 0, 0, 0)
+    const to = new Date(from)
+    to.setDate(to.getDate() + 1)
+    fetch(`/api/availability?start=${from.toISOString()}&end=${to.toISOString()}`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { busy: [] }))
+      .catch(() => ({ busy: [] }))
+      .then((data: { busy?: BusyInterval[] }) => {
+        if (!cancelled) setAvailability({ key: dayKey, busy: data.busy ?? [] })
+      })
+    return () => { cancelled = true }
+  }, [selectedDate, dayKey])
+
+  const loadingSlots = Boolean(dayKey) && availability?.key !== dayKey
+  const isTaken = (start: Date) =>
+    availability?.key === dayKey && overlapsBusy(start, availability.busy)
+
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
@@ -94,6 +118,7 @@ export default function DemoCalendar({ onSelect, selectedDate, selectedTime }: P
   while (cells.length % 7 !== 0) cells.push(null)
 
   const slots = selectedDate ? generateSlots(selectedDate) : []
+  const allTaken = !loadingSlots && slots.length > 0 && slots.every((sl) => isTaken(sl.start))
 
   return (
     <div className="space-y-5">
@@ -167,40 +192,56 @@ export default function DemoCalendar({ onSelect, selectedDate, selectedTime }: P
       {selectedDate && slots.length > 0 && (
         <div className="animate-fade-in">
           <div className="flex items-center gap-2 mb-3">
-            <Clock size={13} strokeWidth={2} className="text-[#0E0E2C]/40" />
-            <span className="text-xs font-semibold text-[#0E0E2C]/50">
+            <Clock size={13} strokeWidth={2} className="text-white/40" />
+            <span className="text-xs font-semibold text-white/50">
               {selectedDate.toLocaleDateString("en-US", {
                 weekday: "long", month: "long", day: "numeric",
               })}
-              {" — "}
+              {" · "}
               {[0, 6].includes(selectedDate.getDay())
-                ? "Weekend · 9 AM – 5 PM"
-                : "Weekday · 9 AM – 7 PM"}
+                ? "Weekend, 9 AM to 5 PM"
+                : "Weekday, 9 AM to 7 PM"}
             </span>
           </div>
-          <div className="grid grid-cols-4 gap-2">
-            {slots.map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => handleTime(t)}
-                className={[
-                  "py-2.5 rounded-xl text-xs font-semibold border transition-all duration-150",
-                  selectedTime === t
-                    ? "bg-[#0E0E2C] text-white border-[#0E0E2C]"
-                    : "bg-white border-[#0E0E2C]/12 text-[#0E0E2C]/65 hover:border-[#0E0E2C]/35 hover:text-[#0E0E2C]",
-                ].join(" ")}
-              >
-                {t}
-              </button>
-            ))}
+          <div className="grid grid-cols-4 gap-2" aria-busy={loadingSlots}>
+            {slots.map(({ label, start }) => {
+              const taken = isTaken(start)
+              const disabled = loadingSlots || taken
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => handleTime(label)}
+                  disabled={disabled}
+                  title={taken ? "Already booked" : undefined}
+                  aria-label={taken ? `${label}, already booked` : label}
+                  className={[
+                    "py-2.5 rounded-xl text-xs font-semibold border transition-all duration-150",
+                    taken
+                      ? "bg-white/5 border-white/10 text-white/30 line-through cursor-not-allowed"
+                      : selectedTime === label
+                        ? "bg-[#0E0E2C] text-white border-[#0E0E2C]"
+                        : "bg-white border-[#0E0E2C]/12 text-[#0E0E2C]/65 hover:border-[#0E0E2C]/35 hover:text-[#0E0E2C]",
+                    loadingSlots ? "opacity-50 cursor-wait" : "",
+                  ].join(" ")}
+                >
+                  {label}
+                </button>
+              )
+            })}
           </div>
+          {loadingSlots && (
+            <p className="text-[11px] text-white/40 mt-2">Checking availability…</p>
+          )}
+          {allTaken && (
+            <p className="text-xs text-white/50 mt-3">This day is fully booked. Please pick another date.</p>
+          )}
         </div>
       )}
 
       {selectedDate && slots.length === 0 && (
-        <p className="text-xs text-[#0E0E2C]/40 text-center py-4">
-          No slots remaining for today. Please pick another date.
+        <p className="text-xs text-white/40 text-center py-4">
+          No slots left today. The earliest booking is 2 hours from now, so please pick another date.
         </p>
       )}
     </div>
