@@ -106,6 +106,8 @@ export async function POST(req: NextRequest) {
           `Team size: ${teamSize}`,
           ...(phone ? [`Phone: ${phone}`] : []),
           ...(message ? ["", `Pain point: ${message}`] : []),
+          "",
+          `Lawrora · ${SITE_URL}`,
         ].join("\n"),
         start,
         end: new Date(start.getTime() + DEMO_MINUTES * 60 * 1000),
