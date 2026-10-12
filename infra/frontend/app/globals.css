@@ -24,6 +24,16 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Native dropdowns: dark popup so options don't render white-on-white */
+select {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: #111111;
+  color: #ffffff;
+}
+
 /* Focus styles — accessible but minimal */
 :focus-visible {
   outline: 2px solid #0E0E2C;

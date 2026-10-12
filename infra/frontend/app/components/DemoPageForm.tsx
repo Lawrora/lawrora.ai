@@ -34,11 +34,12 @@ const selectCls =
 export default function DemoPageForm() {
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "",
-    firm: "", practiceArea: "", teamSize: "", message: "",
+    firm: "", location: "", practiceArea: "", teamSize: "", message: "",
   })
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [confirmationSent, setConfirmationSent] = useState(true)
 
   function set(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }))
@@ -50,8 +51,16 @@ export default function DemoPageForm() {
   }
 
   const isReady =
-    form.firstName && form.lastName && form.email && form.firm &&
+    form.firstName && form.lastName && form.email && form.firm && form.location &&
     form.practiceArea && form.teamSize && selectedDate && selectedTime
+
+  // Selected slot as an exact instant, read in the visitor's own time zone (the calendar shows local times)
+  function slotStart(date: Date, time: string) {
+    const [, h, m, ap] = time.match(/^(\d{1,2}):(\d{2}) (AM|PM)$/) ?? []
+    const start = new Date(date)
+    start.setHours((Number(h) % 12) + (ap === "PM" ? 12 : 0), Number(m), 0, 0)
+    return start
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -67,8 +76,14 @@ export default function DemoPageForm() {
             weekday: "long", year: "numeric", month: "long", day: "numeric",
           }),
           time: selectedTime,
+          start: slotStart(selectedDate!, selectedTime).toISOString(),
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         }),
       })
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setConfirmationSent(data.confirmationSent !== false)
+      }
       setStatus(res.ok ? "success" : "error")
     } catch {
       setStatus("error")
@@ -84,8 +99,17 @@ export default function DemoPageForm() {
         <div>
           <h3 className="text-2xl font-bold text-white mb-2">You&apos;re booked.</h3>
           <p className="text-white/50 text-sm max-w-sm mx-auto leading-relaxed">
-            We&apos;ll send a calendar invite to{" "}
-            <span className="font-semibold text-white">{form.email}</span> within the hour.
+            {confirmationSent ? (
+              <>
+                We&apos;ve sent a calendar invite to{" "}
+                <span className="font-semibold text-white">{form.email}</span>.
+              </>
+            ) : (
+              <>
+                We couldn&apos;t email your confirmation to{" "}
+                <span className="font-semibold text-white">{form.email}</span>, but our team has your booking and will reach out.
+              </>
+            )}{" "}
             See you on{" "}
             <span className="font-semibold text-white">
               {selectedDate?.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
@@ -94,7 +118,7 @@ export default function DemoPageForm() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2 justify-center text-xs text-white/35">
-          <span>Check your inbox for the calendar invite.</span>
+          {confirmationSent && <span>Check your inbox for the calendar invite.</span>}
         </div>
       </div>
     )
@@ -171,6 +195,20 @@ export default function DemoPageForm() {
               placeholder="Smith & Associates LLP"
               value={form.firm}
               onChange={(e) => set("firm", e.target.value)}
+              className={inputCls}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-location">
+              Location <span className="text-white/25">*</span>
+            </label>
+            <input
+              id="demo-location" type="text" required
+              placeholder="Austin, TX"
+              autoComplete="address-level2"
+              value={form.location}
+              onChange={(e) => set("location", e.target.value)}
               className={inputCls}
             />
           </div>

@@ -12,17 +12,12 @@ function escHtml(s: string) {
 
 function buildIcs(params: {
   uid: string
-  dateStr: string   // e.g. "Monday, January 6, 2026"
-  timeStr: string   // e.g. "10:00 AM"
+  start: Date
   firmName: string
   attendeeEmail: string
   attendeeName: string
 }): string {
-  const { uid, dateStr, timeStr, firmName, attendeeEmail, attendeeName } = params
-
-  // Parse "Monday, January 6, 2026" + "10:00 AM" into a JS Date (local time)
-  const clean = dateStr.replace(/^[A-Za-z]+,\s*/, "")
-  const start = new Date(`${clean} ${timeStr}`)
+  const { uid, start, firmName, attendeeEmail, attendeeName } = params
   const end = new Date(start.getTime() + 60 * 60 * 1000) // +1 hour
 
   function fmt(d: Date) {
@@ -52,19 +47,35 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const {
     firstName, lastName, email, phone,
-    firm, practiceArea, teamSize, message,
-    date, time,
+    firm, location, practiceArea, teamSize, message,
+    start: startIso, timeZone: rawTimeZone,
   } = body
+  let { date, time } = body
 
-  if (!firstName || !lastName || !email || !firm || !practiceArea || !teamSize || !date || !time) {
+  if (!firstName || !lastName || !email || !firm || !location || !practiceArea || !teamSize || !date || !time) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
+
+  const start = new Date(startIso)
+  if (!startIso || Number.isNaN(start.getTime())) {
+    return NextResponse.json({ error: "Invalid start time" }, { status: 400 })
+  }
+
+  // Show the slot in the booker's own time zone (falls back to UTC if the zone is unknown)
+  let timeZone = "UTC"
+  try {
+    if (rawTimeZone) {
+      new Intl.DateTimeFormat("en-US", { timeZone: rawTimeZone })
+      timeZone = rawTimeZone
+    }
+  } catch {}
+  date = start.toLocaleDateString("en-US", { timeZone, weekday: "long", year: "numeric", month: "long", day: "numeric" })
+  time = start.toLocaleTimeString("en-US", { timeZone, hour: "numeric", minute: "2-digit", timeZoneName: "short" })
 
   const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@lawrora.ai`
   const ics = buildIcs({
     uid,
-    dateStr: date,
-    timeStr: time,
+    start,
     firmName: firm,
     attendeeEmail: email,
     attendeeName: `${firstName} ${lastName}`,
@@ -87,6 +98,7 @@ export async function POST(req: NextRequest) {
     <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Email</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px"><a href="mailto:${escHtml(email)}" style="color:#0e0e2c">${escHtml(email)}</a></td></tr>
     ${phone ? `<tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Phone</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(phone)}</td></tr>` : ""}
     <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Firm</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(firm)}</td></tr>
+    <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Location</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(location)}</td></tr>
     <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Practice Area</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(practiceArea)}</td></tr>
     <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Team Size</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(teamSize)}</td></tr>
     ${message ? `<tr><td style="padding:11px 0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;vertical-align:top">Pain Point</td><td style="padding:11px 0;font-size:14px;line-height:1.6">${escHtml(message)}</td></tr>` : ""}
@@ -118,7 +130,7 @@ export async function POST(req: NextRequest) {
       reply_to: { email: escHtml(email), name: `${escHtml(firstName)} ${escHtml(lastName)}` },
       subject: `Demo booked: ${firstName} ${lastName} from ${firm} — ${date} at ${time}`,
       html,
-      text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
+      text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nLocation: ${location}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
       attachments: [icsAttachment],
     }),
   })
@@ -151,7 +163,7 @@ export async function POST(req: NextRequest) {
   <p style="margin-top:40px;font-size:11px;color:#bbb">Lawrora · lawrora.ai</p>
 </body></html>`
 
-  await fetch("https://api.mailersend.com/v1/email", {
+  const confirmRes = await fetch("https://api.mailersend.com/v1/email", {
     method: "POST",
     headers: mailerHeaders,
     body: JSON.stringify({
@@ -165,5 +177,10 @@ export async function POST(req: NextRequest) {
     }),
   })
 
-  return NextResponse.json({ ok: true })
+  // The admin already has the booking, so report a failed confirmation instead of failing the request
+  if (!confirmRes.ok) {
+    console.error("MailerSend confirmation error:", await confirmRes.text())
+  }
+
+  return NextResponse.json({ ok: true, confirmationSent: confirmRes.ok })
 }

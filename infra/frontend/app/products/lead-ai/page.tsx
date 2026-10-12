@@ -37,7 +37,7 @@ export default function LeadAI() {
 
       <section className="pt-36 pb-20 px-8">
         <div className="mx-auto max-w-7xl">
-          <Link href="/services" className="inline-flex items-center gap-2 text-xs font-semibold text-white/40 hover:text-white transition-colors mb-10">
+          <Link href="/products" className="inline-flex items-center gap-2 text-xs font-semibold text-white/40 hover:text-white transition-colors mb-10">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             All products
           </Link>

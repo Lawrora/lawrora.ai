@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/services/:product(lead-ai|match-ai|draft-ai|counsel-ai|schedule-ai)",
+        destination: "/products/:product",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
