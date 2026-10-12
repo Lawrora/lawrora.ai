@@ -18,10 +18,10 @@ const practiceAreas = [
 ]
 
 const teamSizes = [
-  "1–2 attorneys",
-  "3–5 attorneys",
-  "6–15 attorneys",
-  "16–50 attorneys",
+  "1-2 attorneys",
+  "3-5 attorneys",
+  "6-15 attorneys",
+  "16-50 attorneys",
   "50+ attorneys",
 ]
 

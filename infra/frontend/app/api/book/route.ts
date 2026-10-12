@@ -4,6 +4,18 @@ import { createMeetEvent, googleCalendarConfigured } from "@/app/lib/googleCalen
 
 const ADMIN_EMAIL = "admin@lawrora.com"
 const DEMO_MINUTES = 60
+const SITE_URL = "https://lawrora.com"
+
+// Brand mark for emails: the scales icon as a PNG (email clients do not render SVG) next to a live-text wordmark
+const LOGO_HEADER = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px"><tr>
+    <td style="vertical-align:middle;padding-right:10px"><a href="${SITE_URL}" style="text-decoration:none"><img src="${SITE_URL}/email/lawrora-icon.png" width="36" height="36" alt="Lawrora" style="display:block;border:0;border-radius:8px"></a></td>
+    <td style="vertical-align:middle;font-family:Arial,sans-serif;font-size:21px;font-weight:700;letter-spacing:-0.3px;color:#0a0a0a"><a href="${SITE_URL}" style="color:#0a0a0a;text-decoration:none">Lawrora</a></td>
+  </tr></table>`
+
+const LOGO_FOOTER = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:40px 0 0;border-top:1px solid #f0ede0;width:100%"><tr>
+    <td style="vertical-align:middle;width:30px;padding-top:20px"><img src="${SITE_URL}/email/lawrora-icon.png" width="22" height="22" alt="" style="display:block;border:0;border-radius:5px"></td>
+    <td style="vertical-align:middle;padding-top:20px;font-family:Arial,sans-serif;font-size:12px;color:#999"><strong style="color:#0a0a0a">Lawrora</strong> &middot; <a href="${SITE_URL}" style="color:#999">lawrora.com</a></td>
+  </tr></table>`
 
 function escHtml(s: string) {
   return String(s)
@@ -129,9 +141,9 @@ export async function POST(req: NextRequest) {
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"></head>
 <body style="font-family:Arial,sans-serif;color:#0e0e2c;max-width:600px;margin:0 auto;padding:32px 24px">
-  <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:12px">Lawrora</p>
+  ${LOGO_HEADER}
   <h1 style="font-size:22px;font-weight:700;margin:0 0 8px">New demo booking</h1>
-  <p style="font-size:14px;color:#666;margin:0 0 28px">A demo has been booked via lawrora.ai/demo</p>
+  <p style="font-size:14px;color:#666;margin:0 0 28px">A demo has been booked via lawrora.com/demo</p>
 
   <div style="background:#f8f7f2;border-radius:12px;padding:20px 24px;margin-bottom:24px">
     <p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin:0 0 4px">Scheduled for</p>
@@ -172,7 +184,7 @@ export async function POST(req: NextRequest) {
   const confirmHtml = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"></head>
 <body style="font-family:Arial,sans-serif;color:#0e0e2c;max-width:600px;margin:0 auto;padding:32px 24px">
-  <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:12px">Lawrora</p>
+  ${LOGO_HEADER}
   <h1 style="font-size:22px;font-weight:700;margin:0 0 8px">You're booked, ${escHtml(firstName)}.</h1>
   <p style="font-size:14px;color:#666;margin:0 0 28px">We're looking forward to showing you Lawrora live. Here are your details.</p>
 
@@ -190,7 +202,7 @@ export async function POST(req: NextRequest) {
 
   <p style="font-size:13px;color:#999;margin:0">Questions? Reply to this email and we'll get back to you right away.</p>
 
-  <p style="margin-top:40px;font-size:11px;color:#bbb">Lawrora · lawrora.ai</p>
+  ${LOGO_FOOTER}
 </body></html>`
 
   const confirm = await sendEmail({
@@ -198,7 +210,7 @@ export async function POST(req: NextRequest) {
     replyTo: `Lawrora <${ADMIN_EMAIL}>`,
     subject: `Your Lawrora demo is confirmed: ${date} at ${time}`,
     html: confirmHtml,
-    text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.${meetLink ? `\n\nJoin on Google Meet: ${meetLink}\n\nYou'll also receive a Google Calendar invite with this link.` : `\n\nA calendar invite is attached. We'll send the meeting link shortly.`}\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.ai`,
+    text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.${meetLink ? `\n\nJoin on Google Meet: ${meetLink}\n\nYou'll also receive a Google Calendar invite with this link.` : `\n\nA calendar invite is attached. We'll send the meeting link shortly.`}\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.com`,
     attachments,
   })
 
