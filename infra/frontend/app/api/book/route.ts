@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sendEmail } from "@/app/lib/email"
+import { createMeetEvent, googleCalendarConfigured } from "@/app/lib/googleCalendar"
 
 const ADMIN_EMAIL = "admin@lawrora.com"
+const DEMO_MINUTES = 60
 
 function escHtml(s: string) {
   return String(s)
@@ -19,7 +21,7 @@ function buildIcs(params: {
   attendeeName: string
 }): string {
   const { uid, start, firmName, attendeeEmail, attendeeName } = params
-  const end = new Date(start.getTime() + 60 * 60 * 1000) // +1 hour
+  const end = new Date(start.getTime() + DEMO_MINUTES * 60 * 1000)
 
   function fmt(d: Date) {
     return d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
@@ -35,7 +37,7 @@ function buildIcs(params: {
     `DTSTAMP:${fmt(new Date())}`,
     `DTSTART:${fmt(start)}`,
     `DTEND:${fmt(end)}`,
-    `SUMMARY:Lawrora Demo — ${firmName}`,
+    `SUMMARY:Lawrora Demo: ${firmName}`,
     `ORGANIZER;CN=Lawrora:MAILTO:${ADMIN_EMAIL}`,
     `ATTENDEE;CN=${attendeeName};ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:${attendeeEmail}`,
     "DESCRIPTION:30-minute live Lawrora product demo.",
@@ -74,6 +76,36 @@ export async function POST(req: NextRequest) {
   time = start.toLocaleTimeString("en-US", { timeZone, hour: "numeric", minute: "2-digit", timeZoneName: "short" })
 
   const uid = `${Date.now()}-${Math.random().toString(36).slice(2)}@lawrora.ai`
+
+  // Create the event on the Lawrora calendar with a unique Meet link. Google sends the invite to the
+  // booker; if this is not configured or fails, fall back to the attached .ics invite without a link.
+  let meetLink: string | null = null
+  if (googleCalendarConfigured()) {
+    try {
+      const event = await createMeetEvent({
+        requestId: uid.replace(/[^a-zA-Z0-9-]/g, ""),
+        summary: `Lawrora Demo: ${firm}`,
+        description: [
+          `Live Lawrora product demo with ${firstName} ${lastName} (${email}).`,
+          "",
+          `Firm: ${firm}`,
+          `Location: ${location}`,
+          `Practice area: ${practiceArea}`,
+          `Team size: ${teamSize}`,
+          ...(phone ? [`Phone: ${phone}`] : []),
+          ...(message ? ["", `Pain point: ${message}`] : []),
+        ].join("\n"),
+        start,
+        end: new Date(start.getTime() + DEMO_MINUTES * 60 * 1000),
+        timeZone,
+        attendee: { email, name: `${firstName} ${lastName}` },
+      })
+      meetLink = event.meetLink
+    } catch (err) {
+      console.error("Google Meet event error:", err)
+    }
+  }
+
   const ics = buildIcs({
     uid,
     start,
@@ -81,6 +113,18 @@ export async function POST(req: NextRequest) {
     attendeeEmail: email,
     attendeeName: `${firstName} ${lastName}`,
   })
+
+  const meetBlock = meetLink
+    ? `<p style="margin:16px 0 0"><a href="${escHtml(meetLink)}" style="display:inline-block;background:#0e0e2c;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:12px 20px;border-radius:8px">Join Google Meet</a></p>
+    <p style="font-size:12px;color:#999;margin:8px 0 0">${escHtml(meetLink)}</p>`
+    : ""
+  const meetText = meetLink ? `\nGoogle Meet: ${meetLink}` : ""
+  // Google already put the event on both calendars, so the .ics is only needed as a fallback
+  const attachments = meetLink ? undefined : [{
+    filename: "lawrora-demo.ics",
+    content: Buffer.from(ics).toString("base64"),
+    contentType: "text/calendar; method=REQUEST",
+  }]
 
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"></head>
@@ -92,6 +136,7 @@ export async function POST(req: NextRequest) {
   <div style="background:#f8f7f2;border-radius:12px;padding:20px 24px;margin-bottom:24px">
     <p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin:0 0 4px">Scheduled for</p>
     <p style="font-size:18px;font-weight:700;color:#0e0e2c;margin:0">${escHtml(date)} at ${escHtml(time)}</p>
+    ${meetBlock}
   </div>
 
   <table style="width:100%;border-collapse:collapse">
@@ -105,23 +150,17 @@ export async function POST(req: NextRequest) {
     ${message ? `<tr><td style="padding:11px 0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;vertical-align:top">Pain Point</td><td style="padding:11px 0;font-size:14px;line-height:1.6">${escHtml(message)}</td></tr>` : ""}
   </table>
 
-  <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.ai/demo — calendar invite attached</p>
+  <p style="margin-top:32px;font-size:11px;color:#bbb">Submitted via lawrora.com/demo. ${meetLink ? "The event is on the Lawrora calendar." : "Calendar invite attached."}</p>
 </body></html>`
 
-  const icsAttachment = {
-    filename: "lawrora-demo.ics",
-    content: Buffer.from(ics).toString("base64"),
-    contentType: "text/calendar; method=REQUEST",
-  }
-
-  // Email 1: admin notification with full details + calendar invite
+  // Email 1: admin notification with full details
   const admin = await sendEmail({
     to: ADMIN_EMAIL,
     replyTo: `${firstName} ${lastName} <${email}>`,
     subject: `Demo booked: ${firstName} ${lastName} from ${firm}, ${date} at ${time}`,
     html,
-    text: `New demo booking\n\nDate: ${date} at ${time}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nLocation: ${location}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
-    attachments: [icsAttachment],
+    text: `New demo booking\n\nDate: ${date} at ${time}${meetText}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nLocation: ${location}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
+    attachments,
   })
 
   if (!admin.ok) {
@@ -140,10 +179,13 @@ export async function POST(req: NextRequest) {
   <div style="background:#f8f7f2;border-radius:12px;padding:20px 24px;margin-bottom:24px">
     <p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin:0 0 4px">Your demo is scheduled for</p>
     <p style="font-size:18px;font-weight:700;color:#0e0e2c;margin:0">${escHtml(date)} at ${escHtml(time)}</p>
+    ${meetBlock}
   </div>
 
   <p style="font-size:14px;color:#666;line-height:1.6;margin:0 0 24px">
-    A calendar invite is attached to this email — open it to add the event to your calendar. We'll reach out shortly to confirm the meeting link.
+    ${meetLink
+      ? "You'll also receive a Google Calendar invite with this link. Accept it to add the demo to your calendar."
+      : "A calendar invite is attached to this email. Open it to add the event to your calendar. We'll send the meeting link shortly."}
   </p>
 
   <p style="font-size:13px;color:#999;margin:0">Questions? Reply to this email and we'll get back to you right away.</p>
@@ -156,8 +198,8 @@ export async function POST(req: NextRequest) {
     replyTo: `Lawrora <${ADMIN_EMAIL}>`,
     subject: `Your Lawrora demo is confirmed: ${date} at ${time}`,
     html: confirmHtml,
-    text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.\n\nA calendar invite is attached. We'll send the meeting link shortly.\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.ai`,
-    attachments: [icsAttachment],
+    text: `Hi ${firstName},\n\nYour Lawrora demo is confirmed for ${date} at ${time}.${meetLink ? `\n\nJoin on Google Meet: ${meetLink}\n\nYou'll also receive a Google Calendar invite with this link.` : `\n\nA calendar invite is attached. We'll send the meeting link shortly.`}\n\nQuestions? Just reply to this email.\n\nLawrora · lawrora.ai`,
+    attachments,
   })
 
   // The admin already has the booking, so report a failed confirmation instead of failing the request
