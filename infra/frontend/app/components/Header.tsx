@@ -41,7 +41,6 @@ const products = [
 const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Solutions", href: "/solutions" },
-  { label: "Resources", href: "/resources" },
 ]
 
 export default function Header() {
