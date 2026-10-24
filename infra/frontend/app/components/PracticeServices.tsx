@@ -4,6 +4,7 @@ import { useRef, useState } from "react"
 import Link from "next/link"
 import {
   Car, House, HeartHandshake, Globe, Gavel, ScrollText, Briefcase, Building2, Check,
+  Scale, ArrowUpRight, ChevronRight,
   type LucideIcon,
 } from "lucide-react"
 
@@ -339,11 +340,14 @@ const practices: Practice[] = [
 const usd = (n: number) =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })
 
+// Card colours, in the same muted palette as the homepage; indexed by practice order
+const practiceColors = ["#6b8fc4", "#7fa383", "#a88b78", "#9a88cf", "#c4877a", "#5f9ea0", "#c9a25f", "#8a6f9e"]
+
 function NumberField({ field, value, onChange }: { field: InputField; value: number; onChange: (v: number) => void }) {
   return (
     <label className="block">
-      <span className="block text-xs font-semibold uppercase tracking-widest text-white/40 mb-2">{field.label}</span>
-      <div className="flex items-center border border-white/15 bg-white/5 focus-within:border-white/40 transition-colors">
+      <span className="block text-xs font-medium text-white/50 mb-2">{field.label}</span>
+      <div className="flex items-center rounded-xl border border-white/10 bg-white/5 focus-within:border-white/40 transition-colors">
         {field.prefix && <span className="pl-4 text-white/40">{field.prefix}</span>}
         <input
           type="number"
@@ -359,7 +363,7 @@ function NumberField({ field, value, onChange }: { field: InputField; value: num
   )
 }
 
-function ProfitView({ practice }: { practice: Practice }) {
+function ProfitView({ practice, color }: { practice: Practice; color: string }) {
   const [values, setValues] = useState<Values>(() =>
     Object.fromEntries(practice.fields.map((f) => [f.id, f.value]))
   )
@@ -368,87 +372,98 @@ function ProfitView({ practice }: { practice: Practice }) {
 
   return (
     <div className="animate-fade-in">
-      <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 max-w-5xl">
+      <span className="inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 text-xs font-medium text-black/70">
+        <span className={`h-1.5 w-1.5 rounded-full ${practice.live ? "bg-emerald-500" : "bg-amber-500"}`} />
+        {practice.live ? `Live for ${practice.name} firms` : "Early access"}
+      </span>
+      <h2 className="mt-6 text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] max-w-5xl">
         What Lawrora is worth to your {practice.name} firm
       </h2>
-      <p className="text-base text-white/50 mb-16 max-w-2xl">
+      <p className="mt-6 text-base md:text-lg text-black/60 max-w-2xl">
         {practice.live
           ? `Lawrora is live for ${practice.name} firms today.`
           : `${practice.name} support is on our roadmap. Book a demo to join early access.`}
       </p>
 
       {/* Profit levers */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10 mb-24">
+      <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4">
         {practice.levers.map((l, i) => (
-          <div key={l.title} className="bg-[#0a0a0a] p-8">
-            <span className="block text-5xl font-bold text-white/25 tabular-nums mb-6">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <h3 className="text-xl font-bold text-white mb-3">{l.title}</h3>
-            <p className="text-sm text-white/55 leading-relaxed">{l.desc}</p>
+          <div key={l.title} className="flex min-h-72 flex-col rounded-4xl p-8 text-white" style={{ backgroundColor: color }}>
+            <span className="text-5xl font-semibold text-white/40 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+            <h3 className="mt-auto pt-10 text-2xl font-semibold leading-tight">{l.title}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-white/80">{l.desc}</p>
           </div>
         ))}
       </div>
 
       {/* Automations */}
-      <div className="border-t border-white/10 pt-16 mb-24">
-        <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">Automations built for {practice.name}</h3>
-        <p className="text-sm text-white/45 mb-12 max-w-2xl">
+      <div className="mt-24">
+        <h3 className="text-3xl md:text-5xl font-bold tracking-tight">Automations built for {practice.name}</h3>
+        <p className="mt-4 text-base text-black/60 max-w-2xl">
           The work Lawrora takes off your team&apos;s plate, from first contact to close.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {practice.automations.map((a) => (
-            <div key={a.title} className="border border-white/10 bg-white/3 p-6">
-              <h4 className="text-base font-bold text-white mb-2">{a.title}</h4>
-              <p className="text-sm text-white/50 leading-relaxed">{a.desc}</p>
+            <div key={a.title} className="rounded-3xl bg-white p-7 shadow-[0_1px_0_rgba(0,0,0,0.04)]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full text-white" style={{ backgroundColor: color }}>
+                <Check size={15} strokeWidth={3} />
+              </span>
+              <h4 className="mt-5 text-lg font-semibold">{a.title}</h4>
+              <p className="mt-2 text-sm leading-relaxed text-black/60">{a.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Estimator */}
-      <div className="border-t border-white/10 pt-16">
-        <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">Estimate your return</h3>
-        <p className="text-sm text-white/45 mb-12 max-w-2xl">
-          Starting values are placeholders. Replace them with your firm&apos;s numbers.
-        </p>
+      <div className="mt-24 overflow-hidden rounded-4xl bg-[#0a0a0a] text-white">
+        <div className="relative px-6 py-12 md:px-14 md:py-16">
+          <div className="pointer-events-none absolute -left-40 top-1/3 h-[140%] w-[90%] rounded-full bg-white/5 blur-3xl" aria-hidden="true" />
+          <div className="relative">
+            <h3 className="text-3xl md:text-5xl font-semibold tracking-tight">Estimate your return</h3>
+            <p className="mt-4 text-base text-white/55 max-w-2xl">
+              Starting values are placeholders. Replace them with your firm&apos;s numbers.
+            </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 content-start">
-            {practice.fields.map((f) => (
-              <NumberField
-                key={f.id}
-                field={f}
-                value={values[f.id]}
-                onChange={(v) => setValues((prev) => ({ ...prev, [f.id]: v }))}
-              />
-            ))}
-          </div>
-
-          <div className="flex flex-col justify-between border border-white/10 p-8 md:p-10">
-            <div className="space-y-8">
-              {results.map((r) => (
-                <div key={r.label}>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-2">{r.label}</p>
-                  <p className="text-3xl font-bold text-white tabular-nums">{usd(r.monthly)}<span className="text-base text-white/40 font-medium"> / month</span></p>
-                  <p className="text-xs text-white/35 mt-1">{r.note}</p>
-                </div>
-              ))}
-              <div className="border-t border-white/10 pt-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-2">Potential added value per year</p>
-                <p className="text-5xl md:text-6xl font-bold text-white tabular-nums">{usd(annual)}</p>
+            <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 content-start">
+                {practice.fields.map((f) => (
+                  <NumberField
+                    key={f.id}
+                    field={f}
+                    value={values[f.id]}
+                    onChange={(v) => setValues((prev) => ({ ...prev, [f.id]: v }))}
+                  />
+                ))}
               </div>
-            </div>
-            <div className="mt-10">
-              <Link
-                href="/demo"
-                className="inline-flex items-center bg-white text-black border border-black px-8 py-4 text-sm font-bold tracking-wide hover:bg-black hover:text-white hover:border-white transition-colors duration-200"
-              >
-                Book a Demo
-              </Link>
-              <p className="text-[11px] text-white/30 mt-4 leading-relaxed">
-                Estimate only, based on the figures above. Actual results depend on your firm.
-              </p>
+
+              <div className="flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 md:p-10">
+                <div className="space-y-8">
+                  {results.map((r) => (
+                    <div key={r.label}>
+                      <p className="text-xs font-medium text-white/50 mb-2">{r.label}</p>
+                      <p className="text-3xl font-semibold tabular-nums">{usd(r.monthly)}<span className="text-base text-white/40 font-medium"> / month</span></p>
+                      <p className="text-xs text-white/40 mt-1">{r.note}</p>
+                    </div>
+                  ))}
+                  <div className="border-t border-white/10 pt-8">
+                    <p className="text-xs font-medium text-white/50 mb-2">Potential added value per year</p>
+                    <p className="text-5xl md:text-6xl font-semibold tabular-nums">{usd(annual)}</p>
+                  </div>
+                </div>
+                <div className="mt-10">
+                  <Link
+                    href="/demo"
+                    className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-white/85"
+                  >
+                    Book a Demo
+                    <ChevronRight size={16} strokeWidth={2.2} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </Link>
+                  <p className="text-[11px] text-white/35 mt-4 leading-relaxed">
+                    Estimate only, based on the figures above. Actual results depend on your firm.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -470,21 +485,27 @@ export default function PracticeServices() {
   return (
     <>
       {/* ── Hero: practice selector ──────────────────────────── */}
-      <section
-        className="relative min-h-screen flex items-center pt-28 pb-16 px-4 md:px-16 lg:px-24 bg-cover bg-center"
-        style={{ backgroundImage: "url('/all_p_bg1.jpg')" }}
-        aria-labelledby="services-hero-heading"
-      >
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 w-full mx-auto max-w-7xl border border-white/15 bg-black/45 backdrop-blur-md p-6 md:p-12">
+      <section className="bg-[#0a0a0a] px-3 md:px-5 pt-18 pb-5" aria-labelledby="services-hero-heading">
+        <div className="rounded-4xl bg-linear-to-b from-[#b9b9b9] via-[#d6d6d6] to-[#f2f2f2] text-black px-6 md:px-14 lg:px-20 py-14 lg:py-20">
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black text-white">
+              <Scale size={20} strokeWidth={2} />
+            </span>
+            <div className="leading-tight">
+              <p className="text-base font-semibold">Services by practice area</p>
+              <p className="text-sm text-black/70">Pick yours to see what Lawrora automates</p>
+            </div>
+          </div>
+
           <h1
             id="services-hero-heading"
-            className="text-[2.75rem] md:text-[5.5rem] font-bold tracking-tight text-white leading-[0.95] mb-10"
+            className="mt-8 font-serif text-[3.25rem] md:text-[6rem] xl:text-[7rem] leading-[0.95] tracking-tight"
           >
             What law do you practise?
           </h1>
+
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+            className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
             role="radiogroup"
             aria-labelledby="services-hero-heading"
           >
@@ -498,26 +519,31 @@ export default function PracticeServices() {
                   role="radio"
                   aria-checked={active}
                   onClick={() => choose(i)}
-                  className={`group relative flex flex-col items-start text-left min-h-40 p-6 border-2 text-white transition-all duration-200 ${
+                  style={{ backgroundColor: practiceColors[i % practiceColors.length] }}
+                  className={`group relative flex min-h-48 flex-col items-start overflow-hidden rounded-3xl p-6 text-left text-white transition-all duration-300 ${
                     active
-                      ? "bg-white/20 border-white shadow-[0_0_0_1px_rgba(255,255,255,0.4)]"
-                      : "bg-white/5 border-white/15 hover:bg-white/10 hover:border-white/50 hover:-translate-y-0.5"
+                      ? "ring-4 ring-black ring-offset-4 ring-offset-[#e0e0e0] -translate-y-1"
+                      : "hover:-translate-y-1 hover:shadow-xl"
                   }`}
                 >
-                  <Icon size={28} strokeWidth={1.75} className={active ? "text-white" : "text-white/80"} />
-                  <span className="mt-auto pt-8 block text-xl font-bold leading-tight text-white">{p.name}</span>
-                  <span className={`block text-sm mt-1 ${active ? "text-white/80" : "text-white/50"}`}>{p.tagline}</span>
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20">
+                    <Icon size={22} strokeWidth={1.75} />
+                  </span>
+                  <span className="mt-auto pt-8 block text-2xl font-semibold leading-tight">{p.name}</span>
+                  <span className="mt-1 block text-sm text-white/75">{p.tagline}</span>
                   <span className="absolute top-5 right-5 flex items-center gap-2">
                     {p.live && (
-                      <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-white/15 text-white">
+                      <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-black">
                         Live
                       </span>
                     )}
-                    {active && (
-                      <span className="w-6 h-6 flex items-center justify-center rounded-full bg-white text-black">
-                        <Check size={14} strokeWidth={3} />
-                      </span>
-                    )}
+                    <span
+                      className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
+                        active ? "bg-white text-black" : "bg-white/20 text-white group-hover:bg-white group-hover:text-black"
+                      }`}
+                    >
+                      {active ? <Check size={14} strokeWidth={3} /> : <ArrowUpRight size={14} strokeWidth={2.2} />}
+                    </span>
                   </span>
                 </button>
               )
@@ -527,11 +553,11 @@ export default function PracticeServices() {
       </section>
 
       {/* ── Profit view for the selected practice ────────────── */}
-      {practice && (
-        <section ref={resultsRef} className="scroll-mt-16 px-8 md:px-16 lg:px-24 py-24 bg-[#0a0a0a]">
+      {practice && selected !== null && (
+        <section ref={resultsRef} className="scroll-mt-16 bg-[#f5f0e8] text-black px-4 md:px-16 lg:px-24 py-24">
           <div className="mx-auto max-w-7xl">
             {/* key resets the estimator to this practice's fields */}
-            <ProfitView key={practice.name} practice={practice} />
+            <ProfitView key={practice.name} practice={practice} color={practiceColors[selected % practiceColors.length]} />
           </div>
         </section>
       )}

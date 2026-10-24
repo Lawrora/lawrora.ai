@@ -27,13 +27,13 @@ const siteUrl ="https://lawrora.ai";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Lawrora | AI Paralegal for Law Firms",
+    default: "Lawrora | Law Firm Automation",
     template: "%s | Lawrora",
   },
   description:
-    "Lawrora is your AI paralegal — capturing leads 24/7, qualifying clients instantly, matching them to the right attorney, and drafting legal documents in seconds. HIPAA & SOC 2 Type II compliant. Built for law firms.",
+    "Lawrora automates your law firm — capturing leads 24/7, qualifying clients instantly, matching them to the right attorney, and drafting legal documents in seconds. HIPAA & SOC 2 Type II compliant. Built for law firms.",
   keywords: [
-    "AI paralegal",
+    "law firm automation platform",
     "legal AI software",
     "law firm automation",
     "legal intake software",
@@ -68,24 +68,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Lawrora",
-    title: "Lawrora | AI Paralegal for Law Firms",
+    title: "Lawrora | Law Firm Automation",
     description:
-      "Capture every lead. Match every client. Draft every document. Lawrora is the AI paralegal built for law firms — HIPAA & SOC 2 Type II compliant.",
+      "Capture every lead. Match every client. Draft every document. Lawrora is the automation platform built for law firms — HIPAA & SOC 2 Type II compliant.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Lawrora — AI Paralegal for Law Firms",
+        alt: "Lawrora — Law Firm Automation",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lawrora | AI Paralegal for Law Firms",
+    title: "Lawrora | Law Firm Automation",
     description:
-      "Capture every lead. Match every client. Draft every document. The AI paralegal built for law firms.",
+      "Capture every lead. Match every client. Draft every document. Automation built for law firms.",
     images: ["/og-image.png"],
     creator: "@lawrora_ai",
     site: "@lawrora_ai",
@@ -114,7 +114,7 @@ const jsonLd = {
         height: 60,
       },
       description:
-        "Lawrora is an AI paralegal platform for law firms — capturing leads, qualifying clients, matching them to the right attorney, and drafting legal documents automatically. HIPAA & SOC 2 Type II compliant.",
+        "Lawrora is a law firm automation platform — capturing leads, qualifying clients, matching them to the right attorney, and drafting legal documents automatically. HIPAA & SOC 2 Type II compliant.",
       sameAs: [
         "https://x.com/lawrora_ai",
         "https://www.linkedin.com/company/lawrora/",
@@ -145,7 +145,7 @@ const jsonLd = {
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
       name: "Lawrora",
-      description: "AI Paralegal for Law Firms",
+      description: "Law Firm Automation",
       publisher: { "@id": `${siteUrl}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
@@ -160,7 +160,7 @@ const jsonLd = {
       applicationCategory: "LegalService",
       operatingSystem: "Web",
       description:
-        "AI-powered legal paralegal software for law firms. Features lead capture, client qualification, attorney matching, document drafting, case research, and scheduling.",
+        "AI-powered automation software for law firms. Features lead capture, client qualification, attorney matching, document drafting, case research, and scheduling.",
       offers: {
         "@type": "Offer",
         price: "0",

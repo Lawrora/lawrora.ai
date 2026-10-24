@@ -68,7 +68,7 @@ export default function Home() {
                     <Scale size={20} strokeWidth={2} />
                   </span>
                   <div className="leading-tight">
-                    <p className="text-base font-semibold">AI paralegal for law firms</p>
+                    <p className="text-base font-semibold">Law firm automation</p>
                     <p className="text-sm text-black/70">
                       Explore our{" "}
                       <Link href="/products" className="font-semibold text-black underline underline-offset-2">products</Link>

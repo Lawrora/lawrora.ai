@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Header from "../components/Header"
 import DemoPageForm from "../components/DemoPageForm"
+import WorkflowSection from "../components/WorkflowSection"
 
 export const metadata: Metadata = {
   title: "Book a Demo — See Lawrora Work on Your Real Intake",
@@ -31,6 +32,8 @@ export default function DemoPage() {
         </main>
 
       </div>
+
+      <WorkflowSection />
     </div>
   )
 }

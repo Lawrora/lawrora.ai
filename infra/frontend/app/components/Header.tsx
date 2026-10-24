@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ChevronDown, Menu, X, Scale, Phone, UserCheck, FileText, BookOpen, CalendarCheck } from "lucide-react"
+import { ChevronDown, Menu, X, Scale, Phone, UserCheck, FileText, BookOpen, CalendarCheck, LayoutGrid, Briefcase, Check, ArrowRight } from "lucide-react"
 
 const products = [
   {
@@ -38,17 +38,46 @@ const products = [
   },
 ]
 
+// Mega menu groups; each name must match an entry in `products`.
+const productGroups = [
+  { heading: "Capture & Qualify", items: ["Lead AI", "Match AI"] },
+  { heading: "Draft & Research",  items: ["Draft AI", "Counsel AI"] },
+  { heading: "Manage & Schedule", items: ["Schedule AI"] },
+]
+
+const exploreLinks = [
+  { name: "All products", desc: "See how the pieces fit together.",     href: "/products",  icon: <LayoutGrid size={14} strokeWidth={2} className="text-white/60" /> },
+  { name: "Services",     desc: "What Lawrora does for your firm.",     href: "/services",  icon: <Briefcase  size={14} strokeWidth={2} className="text-white/60" /> },
+]
+
+const trustPoints = ["HIPAA compliant", "SOC 2 Type II", "Live 24/7", "Built for law firms"]
+
 const navLinks = [
   { label: "Services", href: "/services" },
-  { label: "Solutions", href: "/solutions" },
 ]
 
 export default function Header() {
   const [productsOpen, setProductsOpen] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const isHome = pathname === "/"
+
+  // Delay closing so the pointer can travel from the trigger into the menu.
+  function openProducts() {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setProductsOpen(true)
+  }
+
+  function closeProductsSoon() {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => setProductsOpen(false), 300)
+  }
+
+  useEffect(() => () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+  }, [])
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 12)
@@ -57,7 +86,9 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMobileOpen(false) }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setMobileOpen(false); setProductsOpen(false) }
+    }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [])
@@ -82,14 +113,15 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-1">
             <nav className="flex items-center text-sm font-medium text-white/75">
 
-              {/* Products dropdown */}
+              {/* Products mega menu: the wrapper is static so the panel anchors to the full-width header */}
               <div
-                className="relative"
-                onMouseEnter={() => setProductsOpen(true)}
-                onMouseLeave={() => setProductsOpen(false)}
+                onMouseEnter={openProducts}
+                onMouseLeave={closeProductsSoon}
               >
                 <Link
                   href="/products"
+                  onClick={() => setProductsOpen(false)}
+                  aria-expanded={productsOpen}
                   className="flex items-center gap-1 transition-colors px-4 py-2 rounded-lg hover:text-white hover:bg-white/10"
                 >
                   Products
@@ -101,22 +133,90 @@ export default function Header() {
                 </Link>
 
                 {productsOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-76 bg-[#111] rounded-2xl shadow-2xl border border-white/10 p-2 z-50 animate-fade-in">
-                    {products.map((p) => (
-                      <Link
-                        key={p.name}
-                        href={p.href}
-                        className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-white/6 transition-colors"
-                      >
-                        <div className="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center shrink-0 mt-0.5">
-                          {p.icon}
+                  <div className="absolute left-0 right-0 top-full z-50 px-5 pt-2">
+                    <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl border border-white/10 bg-[#111] shadow-2xl animate-fade-in">
+                      <div className="grid grid-cols-[1fr_auto]">
+                        <div className="grid grid-cols-4 gap-8 p-8">
+                          {/* Product groups */}
+                          <div className="col-span-3">
+                            <p className="mb-5 text-xs font-semibold uppercase tracking-widest text-white/40">Products</p>
+                            <div className="grid grid-cols-3 gap-6">
+                              {productGroups.map((g) => (
+                                <div key={g.heading}>
+                                  <p className="mb-2 px-3 text-[11px] font-semibold text-white/55">{g.heading}</p>
+                                  <div className="space-y-1">
+                                    {products.filter((p) => g.items.includes(p.name)).map((p) => (
+                                      <Link
+                                          key={p.name}
+                                          href={p.href}
+                                          onClick={() => setProductsOpen(false)}
+                                          className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/6"
+                                        >
+                                          <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/8 transition-colors group-hover:bg-white/15">
+                                            {p.icon}
+                                          </div>
+                                          <div>
+                                            <span className="block text-sm font-semibold text-white">{p.name}</span>
+                                            <span className="mt-0.5 block text-xs leading-snug text-white/45">{p.desc}</span>
+                                          </div>
+                                        </Link>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Explore */}
+                          <div className="border-l border-white/8 pl-8">
+                            <p className="mb-5 text-xs font-semibold uppercase tracking-widest text-white/40">Explore</p>
+                            <div className="space-y-1">
+                              {exploreLinks.map((l) => (
+                                <Link
+                                          key={l.name}
+                                          href={l.href}
+                                          onClick={() => setProductsOpen(false)}
+                                          className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/6"
+                                        >
+                                          <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/8 transition-colors group-hover:bg-white/15">
+                                            {l.icon}
+                                          </div>
+                                          <div>
+                                            <span className="block text-sm font-semibold text-white">{l.name}</span>
+                                            <span className="mt-0.5 block text-xs leading-snug text-white/45">{l.desc}</span>
+                                          </div>
+                                        </Link>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <span className="block text-sm font-semibold text-white">{p.name}</span>
-                          <span className="block text-xs text-white/45 leading-snug mt-0.5">{p.desc}</span>
+
+                        {/* Highlight panel */}
+                        <div className="flex w-64 flex-col justify-between border-l border-white/8 bg-white/4 p-8">
+                          <div>
+                            <p className="text-base font-semibold text-white">Automate your firm</p>
+                            <ul className="mt-5 space-y-3">
+                              {trustPoints.map((t) => (
+                                <li key={t} className="flex items-center gap-3 text-sm text-white/75">
+                                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-black">
+                                    <Check size={11} strokeWidth={3} />
+                                  </span>
+                                  {t}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <Link
+                            href="/demo"
+                            onClick={() => setProductsOpen(false)}
+                            className="group mt-8 inline-flex items-center justify-between rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition-colors hover:bg-white/85"
+                          >
+                            Book a demo
+                            <ArrowRight size={15} strokeWidth={2.2} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                          </Link>
                         </div>
-                      </Link>
-                    ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

@@ -62,12 +62,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const {
     firstName, lastName, email, phone,
-    firm, location, practiceArea, teamSize, message,
+    firm, message,
     start: startIso, timeZone: rawTimeZone,
   } = body
   let { date, time } = body
 
-  if (!firstName || !lastName || !email || !firm || !location || !practiceArea || !teamSize || !date || !time) {
+  if (!firstName || !lastName || !email || !firm || !date || !time) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
   }
 
@@ -118,9 +118,6 @@ export async function POST(req: NextRequest) {
           `Live Lawrora product demo with ${firstName} ${lastName} (${email}).`,
           "",
           `Firm: ${firm}`,
-          `Location: ${location}`,
-          `Practice area: ${practiceArea}`,
-          `Team size: ${teamSize}`,
           ...(phone ? [`Phone: ${phone}`] : []),
           ...(message ? ["", `Pain point: ${message}`] : []),
           "",
@@ -175,9 +172,6 @@ export async function POST(req: NextRequest) {
     <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Email</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px"><a href="mailto:${escHtml(email)}" style="color:#0e0e2c">${escHtml(email)}</a></td></tr>
     ${phone ? `<tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Phone</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(phone)}</td></tr>` : ""}
     <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Firm</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(firm)}</td></tr>
-    <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Location</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(location)}</td></tr>
-    <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Practice Area</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(practiceArea)}</td></tr>
-    <tr><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999">Team Size</td><td style="padding:11px 0;border-bottom:1px solid #f0ede0;font-size:14px">${escHtml(teamSize)}</td></tr>
     ${message ? `<tr><td style="padding:11px 0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;vertical-align:top">Pain Point</td><td style="padding:11px 0;font-size:14px;line-height:1.6">${escHtml(message)}</td></tr>` : ""}
   </table>
 
@@ -190,7 +184,7 @@ export async function POST(req: NextRequest) {
     replyTo: `${firstName} ${lastName} <${email}>`,
     subject: `Demo booked: ${firstName} ${lastName} from ${firm}, ${date} at ${time}`,
     html,
-    text: `New demo booking\n\nDate: ${date} at ${time}${meetText}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}\nLocation: ${location}\nPractice Area: ${practiceArea}\nTeam Size: ${teamSize}${message ? `\nPain Point: ${message}` : ""}`,
+    text: `New demo booking\n\nDate: ${date} at ${time}${meetText}\nName: ${firstName} ${lastName}\nEmail: ${email}${phone ? `\nPhone: ${phone}` : ""}\nFirm: ${firm}${message ? `\nPain Point: ${message}` : ""}`,
     attachments,
   })
 

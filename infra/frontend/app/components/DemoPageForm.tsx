@@ -4,37 +4,13 @@ import { useState } from "react"
 import { CheckCircle, ArrowRight, CalendarCheck } from "lucide-react"
 import DemoCalendar from "./DemoCalendar"
 
-const practiceAreas = [
-  "Personal Injury",
-  "Real Estate",
-  "Family Law",
-  "Immigration",
-  "Criminal Defense",
-  "Corporate / Business",
-  "Estate Planning",
-  "Intellectual Property",
-  "Employment Law",
-  "Other",
-]
-
-const teamSizes = [
-  "1-2 attorneys",
-  "3-5 attorneys",
-  "6-15 attorneys",
-  "16-50 attorneys",
-  "50+ attorneys",
-]
-
 const inputCls =
   "w-full rounded-xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:ring-1 focus:ring-white/20 transition-shadow"
-
-const selectCls =
-  "w-full rounded-xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/20 transition-shadow appearance-none cursor-pointer"
 
 export default function DemoPageForm() {
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "",
-    firm: "", location: "", practiceArea: "", teamSize: "", message: "",
+    firm: "", message: "",
   })
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<string>("")
@@ -53,8 +29,7 @@ export default function DemoPageForm() {
   }
 
   const isReady =
-    form.firstName && form.lastName && form.email && form.firm && form.location &&
-    form.practiceArea && form.teamSize && selectedDate && selectedTime
+    form.firstName && form.lastName && form.email && form.firm && selectedDate && selectedTime
 
   // Selected slot as an exact instant, read in the visitor's own time zone (the calendar shows local times)
   function slotStart(date: Date, time: string) {
@@ -214,51 +189,6 @@ export default function DemoPageForm() {
               onChange={(e) => set("firm", e.target.value)}
               className={inputCls}
             />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-location">
-              Location <span className="text-white/25">*</span>
-            </label>
-            <input
-              id="demo-location" type="text" required
-              placeholder="Austin, TX"
-              autoComplete="address-level2"
-              value={form.location}
-              onChange={(e) => set("location", e.target.value)}
-              className={inputCls}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="relative">
-              <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-area">
-                Practice area <span className="text-white/25">*</span>
-              </label>
-              <select
-                id="demo-area" required
-                value={form.practiceArea}
-                onChange={(e) => set("practiceArea", e.target.value)}
-                className={selectCls}
-              >
-                <option value="">Select…</option>
-                {practiceAreas.map((a) => <option key={a} value={a}>{a}</option>)}
-              </select>
-            </div>
-            <div className="relative">
-              <label className="block text-xs font-semibold text-white mb-1.5" htmlFor="demo-size">
-                Team size <span className="text-white/25">*</span>
-              </label>
-              <select
-                id="demo-size" required
-                value={form.teamSize}
-                onChange={(e) => set("teamSize", e.target.value)}
-                className={selectCls}
-              >
-                <option value="">Select…</option>
-                {teamSizes.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
           </div>
 
           <div>

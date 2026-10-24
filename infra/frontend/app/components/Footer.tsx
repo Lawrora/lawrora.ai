@@ -11,7 +11,6 @@ const productLinks = [
 
 const companyLinks = [
   { label: "About",    href: "#" },
-  { label: "Careers",  href: "#" },
   { label: "Blog",     href: "#" },
   { label: "Contact",  href: "#" },
 ]
@@ -67,7 +66,7 @@ export default function Footer() {
               <span className="text-lg font-bold tracking-tight text-white">Lawrora</span>
             </Link>
             <p className="text-sm text-white/45 max-w-xs leading-relaxed mb-6">
-              The AI paralegal for modern law firms. Helps lawyers capture and convert every lead, and connects every client with the right attorney — automatically.
+              Automation for modern law firms. Helps lawyers capture and convert every lead, and connects every client with the right attorney — automatically.
             </p>
             <div className="flex gap-3">
               {socials.map(({ label, href, icon }) => (
