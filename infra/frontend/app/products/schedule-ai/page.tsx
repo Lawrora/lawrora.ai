@@ -1,6 +1,8 @@
 import Link from "next/link"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
+import ProductHero from "../../components/ProductHero"
+import { CalendarCheck } from "lucide-react"
 import { ScheduleAIDemo } from "../../components/ProductDemos"
 
 const features = [
@@ -35,29 +37,14 @@ export default function ScheduleAI() {
     <main className="min-h-screen bg-[#0a0a0a] text-white">
       <Header />
 
-      <section className="pt-36 pb-20 px-8">
-        <div className="mx-auto max-w-7xl">
-          <Link href="/products" className="inline-flex items-center gap-2 text-xs font-semibold text-white/40 hover:text-white transition-colors mb-10">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            All products
-          </Link>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div>
-              <span className="inline-block text-xs font-semibold tracking-widest uppercase bg-emerald-500/15 text-emerald-400 px-3 py-1.5 rounded-full mb-6">Scheduling</span>
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-4">Schedule AI</h1>
-              <p className="text-xl font-semibold text-white/65 mb-5 leading-snug">Every deadline tracked. Every calendar managed.</p>
-              <p className="text-base text-white/50 leading-relaxed mb-8 max-w-lg">
-                Schedule AI monitors filing deadlines, manages attorney calendars, logs time entries, and alerts the team before anything slips, all without manual input.
-              </p>
-              <Link href="/demo" className="inline-block bg-white text-black border border-black px-7 py-3 text-sm font-semibold hover:bg-black hover:text-white hover:border-white transition-colors">
-                Book a Demo
-              </Link>
-            </div>
-            <ScheduleAIDemo />
-          </div>
-        </div>
-      </section>
+      <ProductHero
+        category="Scheduling"
+        name="Schedule AI"
+        icon={<CalendarCheck size={20} strokeWidth={2} />}
+        tagline="Every deadline tracked. Every calendar managed."
+        desc="Schedule AI monitors filing deadlines, manages attorney calendars, logs time entries, and alerts the team before anything slips, all without manual input."
+        demo={<ScheduleAIDemo />}
+      />
 
       <section className="py-20 px-8 border-t border-white/6">
         <div className="mx-auto max-w-7xl">

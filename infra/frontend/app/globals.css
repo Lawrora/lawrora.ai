@@ -168,3 +168,100 @@ select option {
 .nav-underline:hover::after {
   width: 100%;
 }
+
+/* ── Hero intake animation ───────────────── */
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }
+  30%           { opacity: 1;    transform: translateY(-2px); }
+}
+
+.animate-typing-dot { animation: typing-dot 1s ease-in-out infinite; }
+
+/* Promo video: word blur-in, scene fade, card arrival, slow camera push, drifting light */
+@keyframes word-in {
+  from { opacity: 0; filter: blur(10px); transform: translateY(8px); }
+  to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+}
+
+.animate-word { animation: word-in 0.6s ease forwards; }
+
+@keyframes scene-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-scene { animation: scene-in 0.5s ease forwards; }
+
+@keyframes card-in {
+  from { opacity: 0; filter: blur(8px); transform: scale(0.9) translateY(14px); }
+  to   { opacity: 1; filter: blur(0);   transform: scale(1) translateY(0); }
+}
+
+.animate-card { animation: card-in 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) 0.15s forwards; }
+
+@keyframes drift {
+  from { transform: scale(1); }
+  to   { transform: scale(1.045); }
+}
+
+.animate-drift { animation: drift 9s ease-out forwards; }
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in { animation: slide-in 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+
+@keyframes float-a {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(260px, 140px); }
+}
+
+@keyframes float-b {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-300px, -120px); }
+}
+
+.animate-float-a { animation: float-a 18s ease-in-out infinite; }
+.animate-float-b { animation: float-b 22s ease-in-out infinite; }
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-pop { animation: pop 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+
+/* Call intake: voice bars and a ringing handset */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.35); }
+  50%      { transform: scaleY(1); }
+}
+
+.animate-wave { animation: wave 0.6s ease-in-out infinite; }
+
+@keyframes ring {
+  0%, 50%, 100% { transform: rotate(0); }
+  10%, 30%      { transform: rotate(-14deg); }
+  20%, 40%      { transform: rotate(14deg); }
+}
+
+.animate-ring { animation: ring 1.2s ease-in-out infinite; }
+
+/* Case flow: the line's badge turning into the next step's icon */
+@keyframes icon-morph {
+  0%   { opacity: 0; transform: scale(0.3) rotate(-120deg); filter: blur(4px); }
+  60%  { opacity: 1; transform: scale(1.15) rotate(10deg);  filter: blur(0); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+.animate-icon-morph { display: flex; animation: icon-morph 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+
+/* Hero: sound rings spreading from the ringing intake line */
+@keyframes ring-wave {
+  from { opacity: 0.7; transform: scale(0.55); }
+  to   { opacity: 0;   transform: scale(1.35); }
+}
+
+.animate-ring-wave { animation: ring-wave 1.35s ease-out infinite; }
