@@ -245,9 +245,9 @@ export default function DemoPageForm() {
         type="submit"
         disabled={!isReady || status === "loading"}
         className={[
-          "w-full flex items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-bold transition-all duration-200",
+          "w-full flex items-center justify-center gap-2.5 rounded-full py-4.5 text-base md:text-lg font-semibold transition-all duration-200",
           isReady && status !== "loading"
-            ? "bg-white text-black border border-black hover:bg-black hover:text-white hover:border-white hover:-translate-y-0.5 cursor-pointer"
+            ? "bg-white text-black hover:bg-white/85 cursor-pointer"
             : "bg-white/10 text-white/35 cursor-not-allowed",
         ].join(" ")}
       >
@@ -261,8 +261,8 @@ export default function DemoPageForm() {
         )}
       </button>
 
-      <p className="text-center text-xs text-white/25">
-        No commitment. Just 30 focused minutes.
+      <p className="text-center text-xs text-white/40">
+        No commitment. Just 30 focused minutes with someone who knows law firm intake.
       </p>
     </form>
   )
