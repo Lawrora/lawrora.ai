@@ -1,7 +1,8 @@
-import Link from "next/link"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 import ProductHero from "../../components/ProductHero"
+import ProductStory from "../../components/ProductStory"
+import { SCHEDULE_AI } from "../../components/productStories"
 import { CalendarCheck } from "lucide-react"
 import { ScheduleAIDemo } from "../../components/ProductDemos"
 
@@ -12,24 +13,6 @@ const features = [
   { title: "Automated time logging", desc: "Tracks time spent on each matter automatically based on activity, reducing the burden of manual time entry." },
   { title: "Client appointment coordination", desc: "Manages client-facing scheduling, sends reminders, and handles rescheduling without staff involvement." },
   { title: "Deadline alerts", desc: "Proactive alerts fire days or weeks before critical deadlines so nothing is missed and nothing is rushed." },
-]
-
-const steps = [
-  {
-    n: "01",
-    title: "Matter opens",
-    desc: "The moment a matter is created, Schedule AI identifies the relevant deadlines, hearing types, and milestone events for that case category.",
-  },
-  {
-    n: "02",
-    title: "Deadlines and events auto-populated",
-    desc: "The matter's calendar is built automatically. Attorneys see their schedule without entering a single date manually.",
-  },
-  {
-    n: "03",
-    title: "Alerts fire before anything is missed",
-    desc: "Schedule AI monitors every deadline and sends proactive alerts to the right attorney with enough lead time to prepare.",
-  },
 ]
 
 export default function ScheduleAI() {
@@ -46,45 +29,7 @@ export default function ScheduleAI() {
         demo={<ScheduleAIDemo />}
       />
 
-      <section className="py-20 px-8 border-t border-white/6">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-3">Capabilities</p>
-          <h2 className="text-3xl font-bold mb-12">What Schedule AI does</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div key={f.title} className="rounded-2xl border border-white/8 bg-white/5 p-6">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 mb-4" />
-                <h3 className="text-sm font-bold mb-2">{f.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-8 bg-white/4 border-y border-white/6">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-3">How it works</p>
-          <h2 className="text-3xl font-bold mb-12">From matter open to nothing missed</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((s) => (
-              <div key={s.n}>
-                <p className="text-5xl font-bold text-white/8 mb-4 tabular-nums">{s.n}</p>
-                <h3 className="text-lg font-bold mb-3">{s.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 px-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Ready to see it live?</p>
-        <h2 className="text-2xl font-bold mb-6">See Schedule AI manage a live matter in 30 minutes.</h2>
-        <Link href="/demo" className="inline-block bg-white text-black border border-black px-8 py-3 text-sm font-semibold hover:bg-black hover:text-white hover:border-white transition-colors">
-          Book a Demo
-        </Link>
-      </section>
+      <ProductStory story={SCHEDULE_AI} features={features} />
 
       <Footer />
     </main>

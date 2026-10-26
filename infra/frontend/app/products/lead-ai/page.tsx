@@ -1,7 +1,8 @@
-import Link from "next/link"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 import ProductHero from "../../components/ProductHero"
+import ProductStory from "../../components/ProductStory"
+import { LEAD_AI } from "../../components/productStories"
 import { Phone } from "lucide-react"
 import { LeadAIDemo } from "../../components/ProductDemos"
 
@@ -12,24 +13,6 @@ const features = [
   { title: "Instant attorney routing", desc: "Qualified leads are automatically routed to the right attorney without any manual triage or staff intervention." },
   { title: "Pre-qualified lead brief", desc: "The attorney receives a ready-made summary with the prospect's details, case facts, and risk flags before the first call." },
   { title: "No-lead-left-behind guarantee", desc: "Overflow routing and after-hours coverage ensure every contact is handled, even when the team is unavailable." },
-]
-
-const steps = [
-  {
-    n: "01",
-    title: "Prospect reaches out",
-    desc: "A potential client calls, texts, or submits a web form. Lead AI is listening across every channel simultaneously.",
-  },
-  {
-    n: "02",
-    title: "AI engages and qualifies",
-    desc: "An AI assistant responds immediately, converses naturally with the prospect, and scores the matter for case type, urgency, and fit.",
-  },
-  {
-    n: "03",
-    title: "Routed to the right attorney",
-    desc: "The qualified lead and a pre-built brief land in the right attorney's queue. No triage. No manual assignment. No delay.",
-  },
 ]
 
 export default function LeadAI() {
@@ -46,45 +29,7 @@ export default function LeadAI() {
         demo={<LeadAIDemo />}
       />
 
-      <section className="py-20 px-8 border-t border-white/6">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-3">Capabilities</p>
-          <h2 className="text-3xl font-bold mb-12">What Lead AI does</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {features.map((f) => (
-              <div key={f.title} className="rounded-2xl border border-white/8 bg-white/5 p-6">
-                <div className="w-2 h-2 rounded-full bg-blue-400 mb-4" />
-                <h3 className="text-sm font-bold mb-2">{f.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 px-8 bg-white/4 border-y border-white/6">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-3">How it works</p>
-          <h2 className="text-3xl font-bold mb-12">From first contact to attorney queue</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((s) => (
-              <div key={s.n}>
-                <p className="text-5xl font-bold text-white/8 mb-4 tabular-nums">{s.n}</p>
-                <h3 className="text-lg font-bold mb-3">{s.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 px-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">Ready to see it live?</p>
-        <h2 className="text-2xl font-bold mb-6">See Lead AI qualify a real lead in 30 minutes.</h2>
-        <Link href="/demo" className="inline-block bg-white text-black border border-black px-8 py-3 text-sm font-semibold hover:bg-black hover:text-white hover:border-white transition-colors">
-          Book a Demo
-        </Link>
-      </section>
+      <ProductStory story={LEAD_AI} features={features} />
 
       <Footer />
     </main>

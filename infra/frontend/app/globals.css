@@ -265,3 +265,20 @@ select option {
 }
 
 .animate-ring-wave { animation: ring-wave 1.35s ease-out infinite; }
+
+/* Product story visuals: a dot travelling a line, and bars filling */
+@keyframes travel {
+  from { left: 0; opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { left: calc(100% - 0.5rem); opacity: 0; }
+}
+
+.animate-travel { animation: travel 1.6s ease-in-out infinite; }
+
+@keyframes bar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.animate-bar { animation: bar 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
