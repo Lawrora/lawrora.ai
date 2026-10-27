@@ -3,7 +3,7 @@ import Header from "./Header"
 import Footer from "./Footer"
 
 export const LEGAL_UPDATED = "October 26, 2026"
-export const CONTACT_EMAIL = "hello@lawrora.ai"
+export const CONTACT_EMAIL = "help@lawrora.com"
 
 export function LegalSection({ id, title, children }: { id?: string; title: string; children: ReactNode }) {
   return (
