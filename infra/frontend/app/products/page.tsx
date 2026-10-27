@@ -2,33 +2,15 @@ import Link from "next/link"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import FadeIn from "../components/FadeIn"
+import CardCarousel, { type CarouselCard } from "../components/CardCarousel"
 
-const products = [
-  {
-    name: "Lead AI",
-    href: "/products/lead-ai",
-    desc: "Captures and qualifies every inbound lead from call, text, or web, around the clock, so no prospect ever slips through the cracks before an attorney is involved.",
-  },
-  {
-    name: "Match AI",
-    href: "/products/match-ai",
-    desc: "Instantly routes each qualified client to the right attorney by practice area, availability, and case type, eliminating manual intake triage.",
-  },
-  {
-    name: "Draft AI",
-    href: "/products/draft-ai",
-    desc: "Generates demand letters, retainer agreements, and motion templates straight from case facts in seconds, ready for attorney review.",
-  },
-  {
-    name: "Counsel AI",
-    href: "/products/counsel-ai",
-    desc: "Surfaces relevant case law, statutes, and secondary sources and suggests next litigation steps, so attorneys spend time on judgment, not search.",
-  },
-  {
-    name: "Schedule AI",
-    href: "/products/schedule-ai",
-    desc: "Tracks every calendar event, filing deadline, and client coordination task automatically, keeping every matter on time with zero admin overhead.",
-  },
+// One card per product
+const welcomeCards: CarouselCard[] = [
+  { tag: "Lead AI",      title: "Never miss a client",    desc: "Every call, text and web inquiry answered and qualified, day or night.",       bg: "bg-[#6b8fc4]", href: "/products/lead-ai",     image: "/media/free/cards/lead-intake.jpg" },
+  { tag: "Match AI",     title: "The right attorney",     desc: "Qualified clients routed by practice area, licence and availability.",        bg: "bg-[#7fa383]", href: "/products/match-ai",    image: "/media/free/cards/case-matching.jpg" },
+  { tag: "Draft AI",     title: "Drafts in seconds",      desc: "Demand letters and retainers built from case facts, ready for review.",       bg: "bg-[#a88b78]", href: "/products/draft-ai",    image: "/media/free/cards/document-review.jpg" },
+  { tag: "Counsel AI",   title: "Answers, not hours",     desc: "Case law and comparable outcomes surfaced, with next steps suggested.",       bg: "bg-[#9a88cf]", href: "/products/counsel-ai",  image: "/media/free/cards/legal-research.jpg" },
+  { tag: "Schedule AI",  title: "Never miss a deadline",  desc: "Filing deadlines, reminders and client follow-ups tracked automatically.",    bg: "bg-[#c4877a]", href: "/products/schedule-ai", image: "/media/free/cards/case-organization.jpg" },
 ]
 
 export default function Products() {
@@ -53,29 +35,38 @@ export default function Products() {
         </div>
       </section>
 
-      {/* ── Products list ────────────────────────────────────── */}
+      {/* ── Overview ─────────────────────────────────────────── */}
+      <section className="bg-[#f5f0e8] text-black pt-28 pb-24 overflow-hidden">
+        <div className="mx-auto max-w-7xl w-full px-6">
+          <div className="flex flex-col items-center text-center">
+            <FadeIn>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05]">
+                More cases. Less admin.
+                <br />
+                More time for law.
+              </h2>
+            </FadeIn>
+            <FadeIn delay={200}>
+              <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-black/65">
+                Five products that automate the running of a law firm: intake, matching, drafting, research and deadlines. Use one, or run your whole firm on all five.
+              </p>
+            </FadeIn>
+            <FadeIn delay={300}>
+              <Link href="/demo" className="mt-8 inline-flex items-center gap-2 bg-black text-white border border-white px-8 py-4 text-sm font-bold tracking-wide hover:bg-white hover:text-black hover:border-black transition-colors duration-200">
+                Book a Demo →
+              </Link>
+            </FadeIn>
+          </div>
+        </div>
+
+        <FadeIn delay={400} className="mt-20">
+          <CardCarousel cards={welcomeCards} />
+        </FadeIn>
+      </section>
+
+      {/* ── Reach out ────────────────────────────────────── */}
       <section className="px-8 md:px-16 lg:px-24 py-24 bg-[#0a0a0a]">
         <div className="mx-auto max-w-7xl">
-
-          <p className="text-2xl md:text-3xl font-semibold text-white mb-16">
-            Ready to make law easier?
-          </p>
-
-          {products.map(({ name, href, desc }, i) => (
-            <FadeIn key={name} delay={0}>
-              <div className="border-t border-white/10 min-h-[50vh] py-12 grid grid-cols-2 gap-12 items-start">
-                <span className="text-[5.6rem] md:text-[5.6rem] font-bold text-white/30 tabular-nums leading-none">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <Link href={href} className="block text-2xl md:text-3xl font-bold text-white mb-3 hover:text-white/70 transition-colors">
-                    {name}
-                  </Link>
-                  <p className="text-base text-white/55 leading-relaxed">{desc}</p>
-                </div>
-              </div>
-            </FadeIn>
-          ))}
 
           {/* CTA row */}
           <FadeIn>

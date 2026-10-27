@@ -105,8 +105,9 @@ export default function Header() {
         <div className="w-full flex items-center justify-between pl-7 pr-5 py-3">
 
           {/* Logo — always left */}
-          <Link href="/" className="flex items-center leading-none shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 leading-none shrink-0">
             <Scale size={25} strokeWidth={2} className="text-white" />
+            <span className="font-serif text-[1.7rem] leading-none tracking-tight text-white">Lawrora</span>
           </Link>
 
           {/* Desktop: nav + CTA grouped on the right */}

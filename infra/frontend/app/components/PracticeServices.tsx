@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import {
   Car, House, HeartHandshake, Globe, Gavel, ScrollText, Briefcase, Building2, Check,
   Scale, ArrowUpRight, ChevronRight,
@@ -29,6 +30,7 @@ type Practice = {
   name: string
   tagline: string
   icon: LucideIcon
+  image: string
   live: boolean
   levers: [Lever, Lever, Lever]
   automations: Automation[]
@@ -45,6 +47,7 @@ const practices: Practice[] = [
     name: "Personal Injury",
     tagline: "Accidents, injuries, claims",
     icon: Car,
+    image: "/media/free/practices/personal-injury.jpg",
     live: true,
     levers: [
       { title: "Sign the claims you miss today", desc: "Accident victims call the first firm that answers. Every call, text, and form is answered and qualified 24/7, so after-hours claims become signed cases instead of a competitor's." },
@@ -82,6 +85,7 @@ const practices: Practice[] = [
     name: "Real Estate",
     tagline: "Closings, title, leasing",
     icon: House,
+    image: "/media/free/practices/real-estate.jpg",
     live: true,
     levers: [
       { title: "Win the deal on first contact", desc: "Buyers, sellers, and agents get an instant response with transaction details captured, so the work lands with you, not the next firm on the list." },
@@ -119,6 +123,7 @@ const practices: Practice[] = [
     name: "Family Law",
     tagline: "Divorce, custody, support",
     icon: HeartHandshake,
+    image: "/media/free/practices/family-law.jpg",
     live: false,
     levers: [
       { title: "Retain more consultations", desc: "Sensitive divorce and custody inquiries are answered with care at any hour, so more consultations turn into paid retainers." },
@@ -156,6 +161,7 @@ const practices: Practice[] = [
     name: "Immigration",
     tagline: "Visas, green cards, asylum",
     icon: Globe,
+    image: "/media/free/practices/immigration.jpg",
     live: false,
     levers: [
       { title: "Convert inquiries in every language", desc: "Prospective clients are screened in their own language around the clock, so fewer walk away before you speak to them." },
@@ -193,6 +199,7 @@ const practices: Practice[] = [
     name: "Criminal Defense",
     tagline: "Arrests, charges, defense",
     icon: Gavel,
+    image: "/media/free/practices/criminal-defense.jpg",
     live: false,
     levers: [
       { title: "Be the firm that answers at 2am", desc: "Arrest calls come at all hours. Immediate response with charges and court dates captured means you are retained before morning." },
@@ -230,6 +237,7 @@ const practices: Practice[] = [
     name: "Estate Planning",
     tagline: "Wills, trusts, probate",
     icon: ScrollText,
+    image: "/media/free/practices/estate-planning.jpg",
     live: false,
     levers: [
       { title: "Book more planning meetings", desc: "Inquiries are qualified and booked straight onto your calendar, with family and asset details captured before the meeting." },
@@ -267,6 +275,7 @@ const practices: Practice[] = [
     name: "Employment Law",
     tagline: "Wages, discrimination, termination",
     icon: Briefcase,
+    image: "/media/free/practices/employment-law.jpg",
     live: false,
     levers: [
       { title: "Spot the strong claims first", desc: "Every wage, discrimination, and termination inquiry is screened and scored, so attorneys spend time on the cases worth taking." },
@@ -303,6 +312,7 @@ const practices: Practice[] = [
     name: "Corporate / Business",
     tagline: "Formation, contracts, compliance",
     icon: Building2,
+    image: "/media/free/practices/corporate.jpg",
     live: false,
     levers: [
       { title: "Respond before the deal moves on", desc: "Founders and executives get an immediate, informed response with deal size and timeline captured." },
@@ -372,21 +382,28 @@ function ProfitView({ practice, color }: { practice: Practice; color: string }) 
 
   return (
     <div className="animate-fade-in">
-      <span className="inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 text-xs font-medium text-black/70">
-        <span className={`h-1.5 w-1.5 rounded-full ${practice.live ? "bg-emerald-500" : "bg-amber-500"}`} />
-        {practice.live ? `Live for ${practice.name} firms` : "Early access"}
-      </span>
-      <h2 className="mt-6 text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] max-w-5xl">
-        What Lawrora is worth to your {practice.name} firm
-      </h2>
-      <p className="mt-6 text-base md:text-lg text-black/60 max-w-2xl">
-        {practice.live
-          ? `Lawrora is live for ${practice.name} firms today.`
-          : `${practice.name} support is on our roadmap. Book a demo to join early access.`}
-      </p>
+      {/* Photo banner, same treatment as the practice card */}
+      <div className="relative flex min-h-105 md:min-h-130 flex-col justify-end overflow-hidden rounded-4xl p-8 md:p-14 text-white" style={{ backgroundColor: color }}>
+        <Image src={practice.image} alt="" fill sizes="100vw" className="object-cover" priority />
+        <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/10" aria-hidden="true" />
+        <div className="relative">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-medium text-black">
+            <span className={`h-1.5 w-1.5 rounded-full ${practice.live ? "bg-emerald-500" : "bg-amber-500"}`} />
+            {practice.live ? `Live for ${practice.name} firms` : "Early access"}
+          </span>
+          <h2 className="mt-6 font-serif text-5xl md:text-7xl leading-[0.95] tracking-tight max-w-4xl">
+            What Lawrora is worth to your {practice.name} firm
+          </h2>
+          <p className="mt-6 text-base md:text-lg text-white/80 max-w-2xl">
+            {practice.live
+              ? `Lawrora is live for ${practice.name} firms today.`
+              : `${practice.name} support is on our roadmap. Book a demo to join early access.`}
+          </p>
+        </div>
+      </div>
 
       {/* Profit levers */}
-      <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         {practice.levers.map((l, i) => (
           <div key={l.title} className="flex min-h-72 flex-col rounded-4xl p-8 text-white" style={{ backgroundColor: color }}>
             <span className="text-5xl font-semibold text-white/40 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
@@ -397,7 +414,7 @@ function ProfitView({ practice, color }: { practice: Practice; color: string }) 
       </div>
 
       {/* Automations */}
-      <div className="mt-24">
+      <div className="mt-20 px-3 md:px-10">
         <h3 className="text-3xl md:text-5xl font-bold tracking-tight">Automations built for {practice.name}</h3>
         <p className="mt-4 text-base text-black/60 max-w-2xl">
           The work Lawrora takes off your team&apos;s plate, from first contact to close.
@@ -416,7 +433,7 @@ function ProfitView({ practice, color }: { practice: Practice; color: string }) 
       </div>
 
       {/* Estimator */}
-      <div className="mt-24 overflow-hidden rounded-4xl bg-[#0a0a0a] text-white">
+      <div className="mt-20 overflow-hidden rounded-4xl bg-[#0a0a0a] text-white">
         <div className="relative px-6 py-12 md:px-14 md:py-16">
           <div className="pointer-events-none absolute -left-40 top-1/3 h-[140%] w-[90%] rounded-full bg-white/5 blur-3xl" aria-hidden="true" />
           <div className="relative">
@@ -520,17 +537,25 @@ export default function PracticeServices() {
                   aria-checked={active}
                   onClick={() => choose(i)}
                   style={{ backgroundColor: practiceColors[i % practiceColors.length] }}
-                  className={`group relative flex min-h-48 flex-col items-start overflow-hidden rounded-3xl p-6 text-left text-white transition-all duration-300 ${
+                  className={`group relative flex min-h-56 flex-col items-start overflow-hidden rounded-3xl p-6 text-left text-white transition-all duration-300 ${
                     active
                       ? "ring-4 ring-black ring-offset-4 ring-offset-[#e0e0e0] -translate-y-1"
                       : "hover:-translate-y-1 hover:shadow-xl"
                   }`}
                 >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20">
+                  <Image
+                    src={p.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 to-black/35" aria-hidden="true" />
+                  <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
                     <Icon size={22} strokeWidth={1.75} />
                   </span>
-                  <span className="mt-auto pt-8 block text-2xl font-semibold leading-tight">{p.name}</span>
-                  <span className="mt-1 block text-sm text-white/75">{p.tagline}</span>
+                  <span className="relative mt-auto pt-8 block text-2xl font-semibold leading-tight">{p.name}</span>
+                  <span className="relative mt-1 block text-sm text-white/80">{p.tagline}</span>
                   <span className="absolute top-5 right-5 flex items-center gap-2">
                     {p.live && (
                       <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-black">
@@ -554,8 +579,8 @@ export default function PracticeServices() {
 
       {/* ── Profit view for the selected practice ────────────── */}
       {practice && selected !== null && (
-        <section ref={resultsRef} className="scroll-mt-16 bg-[#f5f0e8] text-black px-4 md:px-16 lg:px-24 py-24">
-          <div className="mx-auto max-w-7xl">
+        <section ref={resultsRef} className="scroll-mt-16 bg-[#f5f0e8] text-black px-3 md:px-5 py-5 md:py-8">
+          <div className="mx-auto max-w-400">
             {/* key resets the estimator to this practice's fields */}
             <ProfitView key={practice.name} practice={practice} color={practiceColors[selected % practiceColors.length]} />
           </div>
